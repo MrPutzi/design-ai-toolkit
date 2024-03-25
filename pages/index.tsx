@@ -33,17 +33,18 @@ const Home: NextPage = () => {
           users
         </a>
         <h1 className="mx-auto max-w-4xl font-display text-5xl font-bold tracking-normal text-slate-900 sm:text-7xl">
-          Restoring old photos{" "}
+          {" "}
           <span className="relative whitespace-nowrap text-[#3290EE]">
             <SquigglyLines />
-            <span className="relative">using AI</span>
+            <span className="relative l leading-none">Umelá <br/> inteligencia</span>
           </span>{" "}
-          for everyone.
+          na dosah ruky.
         </h1>
 
         <p className="mx-auto mt-12 max-w-xl text-lg text-slate-700 leading-7">
-          Have old and blurry face photos? Let our AI restore them so those
-          memories can live on. 100% free – restore your photos today.
+          Obnovte svoje fotky už dnes! Využite náš nástroj na obnovu fotiek
+          pomocou umelej inteligencie.
+
         </p>
         {/*<div className="flex justify-center space-x-4">*/}
         {/*  <a*/}

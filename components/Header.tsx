@@ -12,12 +12,12 @@ export default function Header() {
           width={36}
           height={36}
         />
-        <h1 className="sm:text-5xl text-3xl font-bold ml-2 tracking-tight antialiased">
+        <h1 className="sm:text-5xl text-3xl  ml-2 tracking-tight antialiased ">
           DESIGN+ AI Toolkit
         </h1>
       </Link>
       <a
-        href="https://vercel.com/templates/next.js/ai-photo-restorer"
+        href="https://github.com/MrPutzi/design-ai-toolkit"
         target="_blank"
         rel="noreferrer"
       >
