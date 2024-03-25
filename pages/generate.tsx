@@ -15,9 +15,9 @@ import downloadPhoto from "../utils/downloadPhoto";
 import va from "@vercel/analytics";
 import GeneratedPhoto from "../components/GeneratedPhoto";
 
-const Home: NextPage = () => {
+const Home = () =>{
 
-    const [generatedPhoto, setGeneratedPhoto] = useState<string | null>(null); // State for generated photo URL
+    const [generatedPhoto, setGeneratedPhoto] = useState<string | undefined>(undefined); // State for generated photo URL
     const [loading, setLoading] = useState<boolean>(false);
     const [restoredLoaded, setRestoredLoaded] = useState<boolean>(false);
     const [sideBySide, setSideBySide] = useState<boolean>(false);
@@ -26,31 +26,31 @@ const Home: NextPage = () => {
     const [inputPrompt, setInputPrompt] = useState<string>(''); // State for text prompt
 
     async function generatePhoto() {
-        setError(null); // Reset error state before making a new request
-        setLoading(true);
-        try {
-            const res = await fetch("/api/generate", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({ prompt: inputPrompt }),
-            });
-            if (!res.ok) {
-                throw new Error(`API responded with status code ${res.status}`);
-            }
-            const data = await res.json();
-            if (!data || typeof data.url !== 'string') {
-                throw new Error("Invalid response format");
-            }
-            setGeneratedPhoto(data.url);
-        } catch (error) {
-            setError("Failed to generate photo. Please try again later.");
-            console.error(error);
-        } finally {
-            setLoading(false);
+        await new Promise((resolve) => setTimeout(resolve, 10));
+        if (!inputPrompt) {
+            setError('Please enter a description for your image.');
+            return;
         }
+        setLoading(true);
+        setError(null);
+        setGeneratedPhoto(undefined);
+        const response = await fetch('/api/generate', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ prompt: inputPrompt }),
+        });
+        let data = await response.json();
+        setLoading(false);
+        if (response.ok) {
+            setGeneratedPhoto(data.photoUrl);
+        } else {
+        setError(data.message);
     }
+}
+
+
 
     return (
         <div className="flex max-w-6xl mx-auto flex-col items-center justify-center py-2 min-h-screen">
@@ -65,13 +65,16 @@ const Home: NextPage = () => {
                     <AnimatePresence>
                         <motion.div className="flex justify-between items-center w-full flex-col mt-4">
                             <div className="w-full">
-                                <Image alt={"Generated Image"}
-                                       src={generatedPhoto || '/placeholder.png'}
-                                       height={512}
-                                       width={512}
-                                       className="rounded-lg"
-                                       onLoadingComplete={() => setRestoredLoaded(true)}
-                                />
+                                <a href={generatedPhoto} target="_blank" rel="noreferrer">
+                                    <Image
+                                           alt="Generated Image"
+                                           src={generatedPhoto || ''}
+                                           width={512}
+                                           height={512}
+                                           className="rounded-lg"
+                                           onLoadingComplete={() => setRestoredLoaded(true)}
+                                    />
+                                </a>
                                 {error && <p className="text-red-500">{error}</p>}
                                 <input
                                     type="text"
@@ -80,6 +83,8 @@ const Home: NextPage = () => {
                                     onChange={(e) => setInputPrompt(e.target.value)}
                                     className="w-full border border-gray-300 rounded-lg px-4 py-2 mb-5"
                                 />
+
+
                                 <button
                                     onClick={generatePhoto}
                                     disabled={loading}
@@ -87,19 +92,20 @@ const Home: NextPage = () => {
                                 >
                                     {loading ? (
                                         <span className="pt-4">
-                                            <LoadingDots color="white" style="large" />
+                                            <LoadingDots color="white" style="large"/>
                                         </span>
-                                    ) : 'Generate Image' }
+                                    ) : 'Generate Image'}
                                 </button>
                             </div>
                         </motion.div>
                     </AnimatePresence>
                 </ResizablePanel>
             </main>
-            <Footer />
+            <Footer/>
         </div>
 
+
     );
-};
+}
 
 export default Home;
