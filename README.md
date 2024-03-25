@@ -1,4 +1,4 @@
-# [RestorePhotos.io](https://restorephotos.io/)
+# [DESIGN + AT Toolkit](https://design-ai-toolkit.vercel.app/)
 
 This project restores old face photos using AI. Watch the [4 minute explainer video](https://twitter.com/nutlope/status/1614794731396931585) to see how I built this or see the [15 second demo](https://twitter.com/nutlope/status/1612488923716136962).
 
