@@ -25,29 +25,10 @@ const Home: NextPage = () => {
     const [photoName, setPhotoName] = useState<string | null>(null);
     const [inputPrompt, setInputPrompt] = useState<string>(''); // State for text prompt
 
-
-    // const generatePhoto = async () => {
-    //     await new Promise((resolve) => setTimeout(resolve, 1000));
-    //     setLoading(true);
-    //
-    //         const res = await fetch("/api/generate", {
-    //             method: "POST",
-    //             headers: {
-    //                 "Content-Type": "application/json",
-    //             },
-    //             body: JSON.stringify({prompt: inputPrompt}),
-    //         });
-    //         let newPhoto = await res.json();
-    //         if (res.status !== 200) {
-    //             setError(newPhoto);
-    //         } else {
-    //             setGeneratedPhoto(newPhoto);
-    //         }
-    //         setLoading(false);
-    //     }
     async function generatePhoto() {
-        await new Promise((resolve) => setTimeout(resolve, 500));
+        setError(null); // Reset error state before making a new request
         setLoading(true);
+        try {
             const res = await fetch("/api/generate", {
                 method: "POST",
                 headers: {
@@ -55,13 +36,20 @@ const Home: NextPage = () => {
                 },
                 body: JSON.stringify({ prompt: inputPrompt }),
             });
-            let newPhoto = await res.json(); // Get the response as text instead of JSON
-        if (res.status !== 200) {
-            setError(newPhoto);
-        } else {
-            setGeneratedPhoto(newPhoto);
+            if (!res.ok) {
+                throw new Error(`API responded with status code ${res.status}`);
+            }
+            const data = await res.json();
+            if (!data || typeof data.url !== 'string') {
+                throw new Error("Invalid response format");
+            }
+            setGeneratedPhoto(data.url);
+        } catch (error) {
+            setError("Failed to generate photo. Please try again later.");
+            console.error(error);
+        } finally {
+            setLoading(false);
         }
-        setLoading(false);
     }
 
     return (
@@ -77,24 +65,14 @@ const Home: NextPage = () => {
                     <AnimatePresence>
                         <motion.div className="flex justify-between items-center w-full flex-col mt-4">
                             <div className="w-full">
-                                {/*<a href={generatedPhoto ?? undefined} target="_blank" rel="noreferrer">*/}
-                                {/*    <Image alt={"Generated Image"}*/}
-                                {/*             src={generatedPhoto ?? '/placeholder.png'}*/}
-                                {/*           width={512}*/}
-                                {/*           height={512}*/}
-                                {/*           className="rounded-lg">*/}
-                                {/*    </Image>*/}
-                                {/*</a>*/}
                                 <Image alt={"Generated Image"}
-                                       src={generatedPhoto ? generatedPhoto[0] : '/placeholder.png'}
+                                       src={generatedPhoto || '/placeholder.png'}
                                        height={512}
-                                        width={512}
+                                       width={512}
                                        className="rounded-lg"
-                                        onLoadingComplete={() => setGeneratedPhoto(generatedPhoto)}
-
-
-
+                                       onLoadingComplete={() => setRestoredLoaded(true)}
                                 />
+                                {error && <p className="text-red-500">{error}</p>}
                                 <input
                                     type="text"
                                     placeholder="Describe your image"
@@ -109,8 +87,8 @@ const Home: NextPage = () => {
                                 >
                                     {loading ? (
                                         <span className="pt-4">
-                                    <LoadingDots color="white" style="large" />
-                                    </span>
+                                            <LoadingDots color="white" style="large" />
+                                        </span>
                                     ) : 'Generate Image' }
                                 </button>
                             </div>

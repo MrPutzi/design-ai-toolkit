@@ -5,16 +5,19 @@ import redis from "../../utils/redis";
 import Replicate from "replicate";
 
 import dotenv from "dotenv";
-import generatedPhoto from "../../components/GeneratedPhoto";
 
 dotenv.config();
 
-type Data = string;
 interface ExtendedNextApiRequest extends NextApiRequest {
     body: {
         prompt: string;
-        imageUrl: string;
     };
+}
+
+interface ApiResponse {
+    success: boolean;
+    message?: string;
+    photoUrl?: string;
 }
 
 // Create a new ratelimiter, that allows 3 requests per day
@@ -26,15 +29,9 @@ const ratelimit = redis
     })
     : undefined;
 
-interface StartResponse {
-    urls: {
-        get: string;
-    };
-}
-
 export default async function handler(
     req: ExtendedNextApiRequest,
-    res: NextApiResponse<Data>
+    res: NextApiResponse<ApiResponse>
 ) {
     // Rate Limiter Code
     if (ratelimit) {
@@ -44,54 +41,47 @@ export default async function handler(
         res.setHeader("X-RateLimit-Remaining", result.remaining);
 
         if (!result.success) {
-            res
-                .status(429)
-                .json("Too many uploads in 1 day. Please try again after 24 hours.");
+            res.status(429).json({
+                success: false,
+                message: "Too many uploads in 1 day. Please try again after 24 hours."
+            });
             return;
         }
     }
 
-
     const replicate = new Replicate({
-        auth: 'r8_HEyIbXxQ2qKWTRivNGqIVzoQcGwu49R0D6DHM',
+        auth: process.env.REPLICATE_API_KEY,
         userAgent: 'https://www.npmjs.com/package/create-replicate'
-    })
-    const model = 'stability-ai/stable-diffusion:ac732df83cea7fff18b8472768c88ad041fa750ff7682a21affe81863cbe77e4'
+    });
+    const model = 'stability-ai/stable-diffusion';
     const inputPrompt = req.body.prompt;
     const input = {
-            prompt: inputPrompt,
+        prompt: inputPrompt,
         scheduler: 'K_EULER',
         num_outputs: 1,
         guidance_scale: 7.5,
         image_dimensions: '512x512',
         num_inference_steps: 50,
+    };
+
+    try {
+        const output = await replicate.run(model, {input});
+        if (output.status === "succeeded" && output.urls && output.urls.get) {
+            res.status(200).json({
+                success: true,
+                photoUrl: output.urls.get
+            });
+        } else {
+            res.status(500).json({
+                success: false,
+                message: "Failed to generate the image."
+            });
+        }
+    } catch (error) {
+        console.error("Error generating image:", error);
+        res.status(500).json({
+            success: false,
+            message: "An error occurred while processing your request."
+        });
     }
-
-
-
-    const output = await replicate.run(model, {input})
-    console.log(output)
-    let generatedPhoto = output;
-
-    // const startResponse: StartResponse = await replicate.run(model, {input}) as StartResponse;
-    // const endpointUrl = startResponse.urls.get;
-    // let restoredImage: string | null = null;
-    // while (!restoredImage) {
-    //     console.log("polling for result...");
-    //     let finalResponse = await fetch(endpointUrl, {
-    //         method: "GET",
-    //         headers: {
-    //             "Content-Type": "application/json",
-    //             Authorization: "Token " + "r8_HEyIbXxQ2qKWTRivNGqIVzoQcGwu49R0D6DHM",
-    //         },
-    //     });
-    //     let jsonFinalResponse = await finalResponse.json();
-    //     if (jsonFinalResponse.status === "succeeded") {
-    //         restoredImage = jsonFinalResponse.output;
-    //     } else if (jsonFinalResponse.status === "failed") {
-    //         break;
-    //     } else {
-    //         await new Promise((resolve) => setTimeout(resolve, 1000));
-    //     }
-    // }
 }
