@@ -24,11 +24,11 @@ const ratelimit = redis
     })
     : undefined;
 
-interface StartResponse {
-    urls: {
-        get: string;
-    };
-}
+// interface StartResponse {
+//     urls: {
+//         get: string;
+//     };
+// }
 
 export default async function handler(
     req: ExtendedNextApiRequest,
@@ -51,7 +51,7 @@ export default async function handler(
 
     const imageUrl = req.body.imageUrl;
     const replicate = new Replicate({
-        auth: 'r8_HEyIbXxQ2qKWTRivNGqIVzoQcGwu49R0D6DHM',
+        auth: 'r8_9Xjekdd38xbJ5u6MgHZPafvTPp93Rt43YHKQU',
         userAgent: 'https://www.npmjs.com/package/create-replicate'
     })
     const model = 'tencentarc/gfpgan:0fbacf7afc6c144e5be9767cff80f25aff23e52b0708f17e20f9879b2f21516c'
