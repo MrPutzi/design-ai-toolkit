@@ -10,6 +10,8 @@ const Card = styled.div`
     border-radius: 12px;
     overflow: hidden;
     box-shadow: 0px 13px 10px -7px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    stroke-opacity: 0.5;
 
     &:hover {
         box-shadow: 0px 30px 18px -8px rgba(0, 0, 0, 0.1);
@@ -17,7 +19,8 @@ const Card = styled.div`
     }
 `;
 
-const CardImg = styled.div`
+const CardImg = styled.div<{ imageUrl: string }>`
+    background-image: url(${props => props.imageUrl});
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -25,7 +28,10 @@ const CardImg = styled.div`
     height: 235px;
     border-top-left-radius: 12px;
     border-top-right-radius: 12px;
+    box-shadow: 5px 13px 10px -7px black;
+    
 `;
+
 
 const CardInfo = styled.div`
     background-color: #fff;
@@ -42,11 +48,11 @@ type ModelProps = {
 
 };
 
-const ModelCard: React.FC<ModelProps> = ({ title, description, imageUrl,link }) => {
+
+const ModelCard: React.FC<ModelProps> = ({ title, description, imageUrl, link }) => {
     return (
         <Card onClick={()=>window.location.href = link}>
-            <link href="/restore" />
-            <CardImg/>
+            <CardImg imageUrl={imageUrl} />
             <CardInfo>
                 <h5 className="card-title">{title}</h5>
                 <p className="card-text">{description}</p>
@@ -82,8 +88,8 @@ const ModelComponent: React.FC = () => {
     useEffect(() => {
         // Načítanie modelov (simulácia)
         const mockModels: ModelProps[] = [
-            { title: 'Face restoration', description: 'Image-to-image generation/restoration', imageUrl: 'https://upcdn.io/W142hJk/raw/demo/4kjeQfjF3o.png', link:"/restore" },
-            { title: 'Image generation', description: 'Text-to-image generation', imageUrl: '/path/to/image2.jpg',link:"/generate" },
+            { title: 'Face restoration', description: 'Image-to-image generation/restoration', imageUrl: 'https://i.imgur.com/lEVlLiw.png', link:"/restore" },
+            { title: 'Image generation', description: 'Text-to-image generation', imageUrl: "https://i.imgur.com/GEQ0PGSl.png",link:"/generate" },
         ];
         setModels(mockModels);
     }, []);
