@@ -12,8 +12,10 @@ export default function Header() {
           width={36}
           height={36}
         />
-        <h1 className="sm:text-5xl text-3xl  ml-2 tracking-tight antialiased ">
-          DESIGN+ AI Toolkit
+        <h1 className="sm:text-5xl text-3xl font-bold ml-2 tracking-tight antialiased ">
+            <span className="bg-clip-text text-transparent bg-gradient-to-r from-pink-700 to-violet-800">
+            DESIGN+ AI Toolkit
+            </span>
         </h1>
       </Link>
       <a

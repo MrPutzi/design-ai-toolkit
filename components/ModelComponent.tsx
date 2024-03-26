@@ -4,7 +4,7 @@ import styled from 'styled-components';
 // Štýlované komponenty
 const Card = styled.div`
     margin-right: 25px;
-    background-color: #868686;
+    background-color: #fff;
     width: 33.3%;
     position: relative;
     border-radius: 12px;
@@ -32,12 +32,23 @@ const CardImg = styled.div<{ imageUrl: string }>`
     
 `;
 
+const CardTitle = styled.div`
+    padding: 16px 24px;
+    background-color: #fff;
+    border-bottom: 1px solid #f0f0f0;
+    font-weight: bold;
+    
+`;
+
 
 const CardInfo = styled.div`
     background-color: #fff;
     border-bottom-left-radius: 12px;
     border-bottom-right-radius: 12px;
     padding: 16px 24px 24px 24px;
+    transform: scale(0.8, 0.8);
+    margin-top: -20px;
+    
 `;
 
 type ModelProps = {
@@ -51,10 +62,13 @@ type ModelProps = {
 
 const ModelCard: React.FC<ModelProps> = ({ title, description, imageUrl, link }) => {
     return (
-        <Card onClick={()=>window.location.href = link}>
+
+        <Card onClick={()=>window.location.href = link} className="bg-blue-500 shadow-lg shadow-blue-500/50">
             <CardImg imageUrl={imageUrl} />
+            <CardTitle>
+                <h5 className="card-title bold-title">{title}</h5>
+            </CardTitle>
             <CardInfo>
-                <h5 className="card-title">{title}</h5>
                 <p className="card-text">{description}</p>
             </CardInfo>
         </Card>
@@ -88,8 +102,9 @@ const ModelComponent: React.FC = () => {
     useEffect(() => {
         // Načítanie modelov (simulácia)
         const mockModels: ModelProps[] = [
-            { title: 'Face restoration', description: 'Image-to-image generation/restoration', imageUrl: 'https://i.imgur.com/lEVlLiw.png', link:"/restore" },
-            { title: 'Image generation', description: 'Text-to-image generation', imageUrl: "https://i.imgur.com/GEQ0PGSl.png",link:"/generate" },
+            { title: 'tencentarc/gfpgan', description: 'úprava fotiek a detailov tváre', imageUrl: 'https://i.imgur.com/lEVlLiw.png', link:"/restore" },
+            { title: 'stable diffusion', description: 'generovanie fotiek z textu', imageUrl: "https://i.imgur.com/GEQ0PGSl.png",link:"/generate" },
+            { title: 'nightmareai/real-esrgan', description: 'zväčšenie rozlíšenia fotky', imageUrl: "https://i.imgur.com/1H73uDC.png",link:"/realesrgan" },
         ];
         setModels(mockModels);
     }, []);

@@ -1,16 +1,22 @@
 import Replicate from 'replicate'
 import dotenv from 'dotenv'
+import type {NextApiRequest, NextApiResponse} from "next";
 import requestIp from "request-ip";
-import {NextApiRequest, NextApiResponse} from "next";
-import {Ratelimit} from "@upstash/ratelimit";
 import redis from "../../utils/redis";
+import {Ratelimit} from "@upstash/ratelimit";
 dotenv.config()
-
 
 interface ExtendedNextApiRequest extends NextApiRequest {
     body: {
-        prompt: string;
+        imageUrl: string;
     };
+}
+
+interface Data {
+    success: boolean;
+    photoUrl?: string; // Optional in case of errors
+    message?: string;
+
 }
 
 const ratelimit = redis
@@ -20,12 +26,6 @@ const ratelimit = redis
         analytics: true,
     })
     : undefined;
-
-interface Data {
-    success: boolean;
-    photoUrl?: string; // Optional in case of errors
-    message?: string;
-}
 
 
 export default async function handler (
@@ -38,6 +38,7 @@ export default async function handler (
         const result = await ratelimit.limit(identifier!);
         res.setHeader("X-RateLimit-Limit", result.limit);
         res.setHeader("X-RateLimit-Remaining", result.remaining);
+
         if (!result.success) {
             res
                 .status(429)
@@ -45,29 +46,20 @@ export default async function handler (
         }
     }
 
-    const replicate = new Replicate({
-        auth: 'r8_9Xjekdd38xbJ5u6MgHZPafvTPp93Rt43YHKQU',
-        userAgent: 'https://www.npmjs.com/package/create-replicate'
-    })
-    const model = 'stability-ai/sdxl:39ed52f2a78e934b3ba6e2a89f5b1c712de7dfea535525255b1aa35c5565e08b'
-    const input = {
-        width: 768,
-        height: 768,
-        prompt: req.body.prompt,
-        refine: 'expert_ensemble_refiner',
-        scheduler: 'K_EULER',
-        lora_scale: 0.6,
-        num_outputs: 1,
-        guidance_scale: 7.5,
-        apply_watermark: false,
-        high_noise_frac: 0.8,
-        negative_prompt: '',
-        prompt_strength: 0.8,
-        num_inference_steps: 25,
-    }
 
-    console.log({model, input})
-    const output = await replicate.run(model, { input }) as string[];
+        const replicate = new Replicate({
+            auth: 'r8_9Xjekdd38xbJ5u6MgHZPafvTPp93Rt43YHKQU',
+            userAgent: 'https://www.npmjs.com/package/create-replicate'
+        })
+        const model = 'nightmareai/real-esrgan:42fed1c4974146d4d2414e2be2c5277c7fcf05fcc3a73abf41610695738c1d7b'
+        const input = {
+            image: req.body.imageUrl,
+            scale: 2,
+            face_enhance: false,
+        }
+
+        console.log({model, input})
+        const output = await replicate.run(model, {input}) as string[];
     const handleOutput = (output: string[]) => {
         if (!output || output.length === 0) {
             return { success: false, message: "Failed to generate photo. Please try again later." };
@@ -76,8 +68,6 @@ export default async function handler (
         return { success: true, photoUrl };
     };
 
-    const generatedPhotoData = handleOutput(output);
-    res.status(200).json(generatedPhotoData);
-
-}
-
+        const photoUrl = handleOutput(output);
+        res.status(200).json(photoUrl);
+    }
