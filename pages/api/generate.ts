@@ -6,7 +6,6 @@ import {Ratelimit} from "@upstash/ratelimit";
 import redis from "../../utils/redis";
 dotenv.config()
 
-
 interface ExtendedNextApiRequest extends NextApiRequest {
     body: {
         prompt: string;
@@ -27,7 +26,6 @@ interface Data {
     message?: string;
 }
 
-
 export default async function handler (
     req: ExtendedNextApiRequest,
     res: NextApiResponse<Data>
@@ -39,14 +37,13 @@ export default async function handler (
         res.setHeader("X-RateLimit-Limit", result.limit);
         res.setHeader("X-RateLimit-Remaining", result.remaining);
         if (!result.success) {
-            res
-                .status(429)
+            res.status(429).json({ success: false, message: "Rate limit exceeded. Please try again later." });
             return;
         }
     }
 
     const replicate = new Replicate({
-        auth: 'r8_9Xjekdd38xbJ5u6MgHZPafvTPp93Rt43YHKQU',
+        auth: process.env.REPLICATE_API_KEY,
         userAgent: 'https://www.npmjs.com/package/create-replicate'
     })
     const model = 'stability-ai/sdxl:39ed52f2a78e934b3ba6e2a89f5b1c712de7dfea535525255b1aa35c5565e08b'
@@ -67,17 +64,20 @@ export default async function handler (
     }
 
     console.log({model, input})
-    const output = await replicate.run(model, { input }) as string[];
-    const handleOutput = (output: string[]) => {
-        if (!output || output.length === 0) {
-            return { success: false, message: "Failed to generate photo. Please try again later." };
-        }
-        const photoUrl = output[0];
-        return { success: true, photoUrl };
-    };
+    try {
+        const output = await replicate.run(model, { input }) as string[];
+        const handleOutput = (output: string[]) => {
+            if (!output || output.length === 0) {
+                return { success: false, message: "Failed to generate photo. Please try again later." };
+            }
+            const photoUrl = output[0];
+            return { success: true, photoUrl };
+        };
 
-    const generatedPhotoData = handleOutput(output);
-    res.status(200).json(generatedPhotoData);
-
+        const generatedPhotoData = handleOutput(output);
+        res.status(200).json(generatedPhotoData);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ success: false, message: "An error occurred while processing your request." });
+    }
 }
-

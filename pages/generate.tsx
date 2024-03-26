@@ -46,11 +46,14 @@ const Home = () =>{
         if (response.ok) {
             setGeneratedPhoto(data.photoUrl);
         } else {
-        setError(data.message);
+            setError(data.message);
+        }
     }
-}
 
-
+    function onImageLoadError() {
+        setError('Failed to load image.');
+        setGeneratedPhoto(undefined);
+    }
 
     return (
         <div className="flex max-w-6xl mx-auto flex-col items-center justify-center py-2 min-h-screen">
@@ -65,16 +68,19 @@ const Home = () =>{
                     <AnimatePresence>
                         <motion.div className="flex justify-between items-center w-full flex-col mt-4">
                             <div className="w-full">
-                                <a href={generatedPhoto} target="_blank" rel="noreferrer">
-                                    <Image
-                                           alt="Generated Image"
-                                           src={generatedPhoto || ''}
-                                           width={512}
-                                           height={512}
-                                           className="rounded-lg"
-                                           onLoadingComplete={() => setRestoredLoaded(true)}
-                                    />
-                                </a>
+                                {generatedPhoto && (
+                                    <a href={generatedPhoto} target="_blank" rel="noreferrer">
+                                        <Image
+                                               alt="Generated Image"
+                                               src={generatedPhoto}
+                                               width={512}
+                                               height={512}
+                                               className="rounded-lg"
+                                               onLoadingComplete={() => setRestoredLoaded(true)}
+                                               onError={onImageLoadError}
+                                        />
+                                    </a>
+                                )}
                                 {error && <p className="text-red-500">{error}</p>}
                                 <input
                                     type="text"
