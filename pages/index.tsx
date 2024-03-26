@@ -6,7 +6,6 @@ import Footer from "../components/Footer";
 import Header from "../components/Header";
 import SquigglyLines from "../components/SquigglyLines";
 import { Testimonials } from "../components/Testimonials";
-import ModelList from "../components/ModelList";
 import ModelComponent from "../components/ModelComponent";
 
 const Home: NextPage = () => {
