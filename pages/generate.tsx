@@ -68,7 +68,7 @@ const Home = () =>{
                     <AnimatePresence>
                         <motion.div className="flex justify-between items-center w-full flex-col mt-4">
                             <div className="w-full">
-                                {generatedPhoto && (
+                                {generatedPhoto ? (
                                     <a href={generatedPhoto} target="_blank" rel="noreferrer">
                                         <Image
                                                alt="Generated Image"
@@ -80,7 +80,7 @@ const Home = () =>{
                                                onError={onImageLoadError}
                                         />
                                     </a>
-                                )}
+                                ) : null}
                                 {error && <p className="text-red-500">{error}</p>}
                                 <input
                                     type="text"
