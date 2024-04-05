@@ -14,13 +14,6 @@ const GeneratedPhoto: React.FC<GeneratedPhotoProps> = ({ photoUrl }) => {
         if (photoUrl) {
             setLoading(true);
             setError(null);
-            const image = new Image();
-            image.src = photoUrl;
-            image.onload = () => setLoading(false);
-            image.onerror = () => {
-                setError('Failed to load image');
-                setLoading(false);
-            };
         }
     }, [photoUrl]);
 
@@ -56,6 +49,11 @@ const GeneratedPhoto: React.FC<GeneratedPhotoProps> = ({ photoUrl }) => {
                 width={512}
                 height={512}
                 className="rounded-lg"
+                onLoad={() => setLoading(false)}
+                onError={() => {
+                    setError('Failed to load image');
+                    setLoading(false);
+                }}
             />
             <div className="flex items-center justify-center mt-4">
                 <button

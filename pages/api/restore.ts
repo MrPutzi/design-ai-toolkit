@@ -60,10 +60,8 @@ export default async function handler(
         version: "v1.4",
         scale: 2,
     }
+    console.log({model, input})
 
-    const output = await replicate.run(model, {input})
-console.log(output)
-    let restoredImage = output;
 
 
 
