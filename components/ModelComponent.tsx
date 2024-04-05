@@ -105,6 +105,7 @@ const ModelComponent: React.FC = () => {
             { title: 'tencentarc/gfpgan', description: 'úprava fotiek a detailov tváre', imageUrl: 'https://i.imgur.com/lEVlLiw.png', link:"/restore" },
             { title: 'stable diffusion', description: 'generovanie fotiek z textu', imageUrl: "https://i.imgur.com/GEQ0PGSl.png",link:"/generate" },
             { title: 'nightmareai/real-esrgan', description: 'zväčšenie rozlíšenia fotky', imageUrl: "https://i.imgur.com/1H73uDC.png",link:"/realesrgan" },
+            { title: 'lucataco/realistic-vision-v5', description: 'generovanie realistických fotiek z textu', imageUrl: "https://replicate.delivery/pbxt/eVMzXJerAzpqnErNJ9P4ncWmd2d3OkGA31DKhG3ElQhLMIbRA/output.png",link:"/realvision" },
         ];
         setModels(mockModels);
     }, []);
