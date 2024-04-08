@@ -9,6 +9,7 @@ dotenv.config()
 interface ExtendedNextApiRequest extends NextApiRequest {
     body: {
         imageUrl: string;
+        apiKey: string; // Added to receive the new API key from the user
     };
 }
 
@@ -46,20 +47,20 @@ export default async function handler (
         }
     }
 
+    // Replace the auth property with the new API key provided by the user
+    const replicate = new Replicate({
+        auth: req.body.apiKey, // Changed to use the API key from the request body
+        userAgent: 'https://www.npmjs.com/package/create-replicate'
+    })
+    const model = 'nightmareai/real-esrgan:42fed1c4974146d4d2414e2be2c5277c7fcf05fcc3a73abf41610695738c1d7b'
+    const input = {
+        image: req.body.imageUrl,
+        scale: 2,
+        face_enhance: false,
+    }
 
-        const replicate = new Replicate({
-            auth: 'r8_9Xjekdd38xbJ5u6MgHZPafvTPp93Rt43YHKQU',
-            userAgent: 'https://www.npmjs.com/package/create-replicate'
-        })
-        const model = 'nightmareai/real-esrgan:42fed1c4974146d4d2414e2be2c5277c7fcf05fcc3a73abf41610695738c1d7b'
-        const input = {
-            image: req.body.imageUrl,
-            scale: 2,
-            face_enhance: false,
-        }
-
-        console.log({model, input})
-        const output = await replicate.run(model, {input}) as string[];
+    console.log({model, input})
+    const output = await replicate.run(model, {input}) as string[];
     const handleOutput = (output: string[]) => {
         if (!output || output.length === 0) {
             return { success: false, message: "Failed to generate photo. Please try again later." };
@@ -68,6 +69,6 @@ export default async function handler (
         return { success: true, photoUrl };
     };
 
-        const photoUrl = handleOutput(output);
-        res.status(200).json(photoUrl);
-    }
+    const photoUrl = handleOutput(output);
+    res.status(200).json(photoUrl);
+}
