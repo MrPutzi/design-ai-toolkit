@@ -4,9 +4,7 @@ import {Ratelimit} from "@upstash/ratelimit";
 import Replicate from "replicate";
 import requestIp from "request-ip";
 import dotenv from "dotenv";
-import {json} from "node:stream/consumers";
 dotenv.config()
-
 
 interface ExtendedNextApiRequest extends NextApiRequest {
     body: {
@@ -44,7 +42,7 @@ export default async (
     }
 
     const replicate = new Replicate({
-        auth: "r8_4VNdkbY6n9d9kuAiuyAa8gziouf98QC0ZOdBx", // Moved API key to environment variable
+        auth: req.headers['x-api-key'], // Replace with the API key provided by the user
         userAgent: 'https://www.npmjs.com/package/create-replicate'
     })
     const model = 'lucataco/realistic-vision-v5:8aeee50b868f06a1893e3b95a8bb639a8342e846836f3e0211d6a13c158505b1'
@@ -68,4 +66,3 @@ export default async (
     console.log({setGeneratedPhoto})
     res.status(200).json({ success: true, output: setGeneratedPhoto });
 }
-

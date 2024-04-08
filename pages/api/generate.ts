@@ -43,7 +43,7 @@ export default async function handler (
     }
 
     const replicate = new Replicate({
-        auth: "r8_4VNdkbY6n9d9kuAiuyAa8gziouf98QC0ZOdBx", // Moved API key to environment variable
+        auth: process.env.REPLICATE_API_KEY, // Updated to use environment variable
         userAgent: 'https://www.npmjs.com/package/create-replicate'
     })
     const model = 'stability-ai/sdxl:39ed52f2a78e934b3ba6e2a89f5b1c712de7dfea535525255b1aa35c5565e08b'

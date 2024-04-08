@@ -24,12 +24,6 @@ const ratelimit = redis
     })
     : undefined;
 
-// interface StartResponse {
-//     urls: {
-//         get: string;
-//     };
-// }
-
 export default async function handler(
     req: ExtendedNextApiRequest,
     res: NextApiResponse<Data>
@@ -51,7 +45,7 @@ export default async function handler(
 
     const imageUrl = req.body.imageUrl;
     const replicate = new Replicate({
-        auth: 'r8_9Xjekdd38xbJ5u6MgHZPafvTPp93Rt43YHKQU',
+        auth: process.env.REPLICATE_API_KEY, // Replace hardcoded API key with environment variable
         userAgent: 'https://www.npmjs.com/package/create-replicate'
     })
     const model = 'tencentarc/gfpgan:0fbacf7afc6c144e5be9767cff80f25aff23e52b0708f17e20f9879b2f21516c'
@@ -62,8 +56,8 @@ export default async function handler(
     }
     console.log({model, input})
 
-
-
+    // The rest of the code that interacts with the Replicate API is commented out.
+    // If needed, it should be updated to use the new API key from the environment variable as well.
 
     // const startResponse: StartResponse = await replicate.run(model, {input}) as StartResponse;
     // const endpointUrl = startResponse.urls.get;
@@ -74,7 +68,7 @@ export default async function handler(
     //         method: "GET",
     //         headers: {
     //             "Content-Type": "application/json",
-    //             Authorization: "Token " + "r8_HEyIbXxQ2qKWTRivNGqIVzoQcGwu49R0D6DHM",
+    //             Authorization: "Token " + process.env.REPLICATE_API_KEY,
     //         },
     //     });
     //     let jsonFinalResponse = await finalResponse.json();
