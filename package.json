@@ -9,7 +9,7 @@
     "@headlessui/react": "^1.7.7",
     "@tensorflow/tfjs": "^3.21.0",
     "@upstash/ratelimit": "^0.3.8",
-    "@upstash/redis": "^1.19.1",
+    "@upstash/redis": "^1.29.0",
     "@vercel/analytics": "^0.1.9-beta.4",
     "dotenv": "^16.4.5",
     "framer-motion": "^8.2.4",
