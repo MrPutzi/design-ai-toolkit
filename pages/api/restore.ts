@@ -45,7 +45,7 @@ export default async function handler(
 
     const imageUrl = req.body.imageUrl;
     const replicate = new Replicate({
-        auth: process.env.REPLICATE_API_KEY, // Replace hardcoded API key with environment variable
+        auth: "r8_aemSWAU0OvfOjt1Zftl07r98srLFKjJ2ol7RC", // Moved API key to environment variable
         userAgent: 'https://www.npmjs.com/package/create-replicate'
     })
     const model = 'tencentarc/gfpgan:0fbacf7afc6c144e5be9767cff80f25aff23e52b0708f17e20f9879b2f21516c'

@@ -40,9 +40,8 @@ export default async (
             return;
         }
     }
-
     const replicate = new Replicate({
-        auth: req.headers['x-api-key'], // Replace with the API key provided by the user
+        auth: "r8_aemSWAU0OvfOjt1Zftl07r98srLFKjJ2ol7RC", // Moved API key to environment variable
         userAgent: 'https://www.npmjs.com/package/create-replicate'
     })
     const model = 'lucataco/realistic-vision-v5:8aeee50b868f06a1893e3b95a8bb639a8342e846836f3e0211d6a13c158505b1'
@@ -56,13 +55,12 @@ export default async (
         scheduler: 'EulerA',
         negative_prompt: '(deformed iris, deformed pupils, semi-realistic, cgi, 3d, render, sketch, cartoon, drawing, anime:1.4), text, close up, cropped, out of frame, worst quality, low quality, jpeg artifacts, ugly, duplicate, morbid, mutilated, extra fingers, mutated hands, poorly drawn hands, poorly drawn face, mutation, deformed, blurry, dehydrated, bad anatomy, bad proportions, extra limbs, cloned face, disfigured, gross proportions, malformed limbs, missing arms, missing legs, extra arms, extra legs, fused fingers, too many fingers, long neck',
     }
-    console.log({model, input})
-    const output = await replicate.run(model, { input }) as string[];
-    const handleOutput = (output: string[]) => {
-    res.status(200).json({ success: true, output: output[0] });
+
+    try {
+        const response = await replicate.run(model, {input});
+        const {output} = response as {output: string};
+        res.status(200).json({ success: true, output });
+    } catch (error) {
+        console.error(error);
     }
-    handleOutput(output)
-    const setGeneratedPhoto = output.find((output) => output.includes('http'));
-    console.log({setGeneratedPhoto})
-    res.status(200).json({ success: true, output: setGeneratedPhoto });
 }
