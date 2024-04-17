@@ -32,6 +32,14 @@ const Home: NextPage = () => {
           na dosah ruky.
         </h1>
 
+          <Link
+              className="bg-black rounded-xl text-white font-medium px-4 py-3 sm:mt-10 mt-8 hover:bg-black/80"
+              href="/register"
+          >
+              Zaregistrujte sa
+          </Link>
+
+
         <p className="mx-auto mt-12 max-w-xl text-lg text-slate-700 leading-7">
           Obnovte svoje fotky už dnes! Využite náš nástroj na obnovu fotiek
           pomocou umelej inteligencie.

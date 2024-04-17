@@ -47,9 +47,8 @@ export default async function handler (
         }
     }
 
-    // Replace the auth property with the new API key provided by the user
     const replicate = new Replicate({
-        auth: req.body.apiKey, // Changed to use the API key from the request body
+        auth: "r8_aemSWAU0OvfOjt1Zftl07r98srLFKjJ2ol7RC", // Moved API key to environment variable
         userAgent: 'https://www.npmjs.com/package/create-replicate'
     })
     const model = 'nightmareai/real-esrgan:42fed1c4974146d4d2414e2be2c5277c7fcf05fcc3a73abf41610695738c1d7b'
