@@ -1,8 +1,10 @@
-# [DESIGN + AT Toolkit](https://design-ai-toolkit.vercel.app/)
+# [DESIGN + AI Toolkit](https://design-ai-toolkit.vercel.app/)
+
+
 
 This project restores face photos, generate images from text faster with stable diffusion or a bit longer with Real Vision.
  
-[![Face Photo Restorer](./public/screenshot.png)](https://restorephotos.io/)
+
 
 ## How it works
 
