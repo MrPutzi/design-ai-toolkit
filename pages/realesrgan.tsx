@@ -52,11 +52,32 @@ const Home: NextPage = () => {
             }}
             width="670px"
             height="250px"
+
         />
     );
 
 
 
+    // async function generatePhoto(fileUrl: string) {
+    //     setLoading(true);
+    //     setError(null);
+    //     setUpscaledPhoto(null);
+    //     const response = await fetch('/api/realesrgan', {
+    //         method: 'POST',
+    //         headers: {
+    //             'Content-Type': 'application/json',
+    //         },
+    //         body: JSON.stringify({ imageUrl: fileUrl }),
+    //     });
+    //     let data = await response.json();
+    //     setLoading(false);
+    //     if (response.ok) {
+    //         setLoading(false);
+    //         setUpscaledPhoto(data.photoUrl);
+    //     } else {
+    //         setError(data.message);
+    //     }
+    // }
     async function generatePhoto(fileUrl: string) {
         setLoading(true);
         setError(null);
@@ -66,17 +87,24 @@ const Home: NextPage = () => {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ imageUrl: fileUrl }),
+            body: JSON.stringify({ input: { image: fileUrl, scale: 2, face_enhance: false }}),
         });
+        console.log(response)
+        if (!response.ok) {
+            setLoading(false);
+            setError('Error: ' + response.statusText);
+            return;
+        }
+
         let data = await response.json();
         setLoading(false);
-        if (response.ok) {
-            setLoading(false);
-            setUpscaledPhoto(data.photoUrl);
+        if (data.success) {
+            setUpscaledPhoto(data.output);
         } else {
             setError(data.message);
         }
     }
+
 
 
     return (
