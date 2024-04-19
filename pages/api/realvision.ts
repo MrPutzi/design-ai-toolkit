@@ -41,7 +41,7 @@ export default async (
         }
     }
     const replicate = new Replicate({
-        auth: "r8_aemSWAU0OvfOjt1Zftl07r98srLFKjJ2ol7RC", // Moved API key to environment variable
+        auth: "r8_QODWLhOyB1bnz2kIpNnK740PcuHM1E94ZKCVw", // Moved API key to environment variable
         userAgent: 'https://www.npmjs.com/package/create-replicate'
     })
     const model = 'lucataco/realistic-vision-v5:8aeee50b868f06a1893e3b95a8bb639a8342e846836f3e0211d6a13c158505b1'
