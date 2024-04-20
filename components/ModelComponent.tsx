@@ -9,13 +9,14 @@ const Card = styled.div`
     position: relative;
     border-radius: 12px;
     overflow: hidden;
-    box-shadow: 0px 13px 10px -7px rgba(0, 0, 0, 0.1);
+    box-shadow: 4px 13px 10px -7px rgba(0, 0, 0, 0.1);
     transition: all 0.3s ease;
     stroke-opacity: 0.5;
 
     &:hover {
-        box-shadow: 0px 30px 18px -8px rgba(0, 0, 0, 0.1);
+        box-shadow: 20px 30px 18px -8px rgba(0, 0, 0, 0.1);
         transform: scale(1.10, 1.10);
+        
     }
 `;
 
