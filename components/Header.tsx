@@ -1,3 +1,4 @@
+import {LoginLink, RegisterLink} from "@kinde-oss/kinde-auth-nextjs";
 import Image from "next/image";
 import Link from "next/link";
 import React, { useContext } from "react";
@@ -33,18 +34,18 @@ export default function Header() {
                     </>
                 ) : (
                     <>
-                        <Link href="/login">
+                        <LoginLink>
                             <button
                                 className="bg-gradient-to-r from-pink-700 to-violet-800 hover:bg-gradient-to-tl text-white font-semibold py-2 px-4 border border-gray-400 rounded shadow">
                                 Login
                             </button>
-                        </Link>
-                        <Link href="/register">
+                        </LoginLink>
+                        <RegisterLink>
                             <button
                                 className="bg-gradient-to-r from-pink-700 to-violet-800 hover:bg-gradient-to-tl text-white font-semibold py-2 px-4 border border-gray-400 rounded shadow">
                                 Register
                             </button>
-                        </Link>
+                        </RegisterLink>
                     </>
                 )}
             </div>
