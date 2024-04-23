@@ -51,7 +51,7 @@
         }
 
         const replicate = new Replicate({
-            auth: "r8_QODWLhOyB1bnz2kIpNnK740PcuHM1E94ZKCVw", // Moved API key to environment variable
+            auth: "r8_2vsTHdL2qcq6r7jJLiCbNnZTTROSwNA0iEK1H",
             userAgent: 'https://www.npmjs.com/package/create-replicate'
         })
         const output = await replicate.run(

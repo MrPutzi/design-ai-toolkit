@@ -8,7 +8,6 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-type Data = string;
 interface ExtendedNextApiRequest extends NextApiRequest {
     body: {
         imageUrl: string;
@@ -24,6 +23,12 @@ const ratelimit = redis
     })
     : undefined;
 
+interface Data {
+    success: boolean;
+    photoUrl?: string; // Optional in case of errors
+    message?: string;
+}
+
 export default async function handler(
     req: ExtendedNextApiRequest,
     res: NextApiResponse<Data>
@@ -37,15 +42,14 @@ export default async function handler(
 
         if (!result.success) {
             res
-                .status(429)
-                .json("Too many uploads in 1 day. Please try again after 24 hours.");
+            res.status(429).json({success: false, message: "Rate limit exceeded. Please try again later."});
             return;
         }
     }
 
     const imageUrl = req.body.imageUrl;
     const replicate = new Replicate({
-        auth: "r8_QODWLhOyB1bnz2kIpNnK740PcuHM1E94ZKCVw", // Moved API key to environment variable
+        auth: "r8_2vsTHdL2qcq6r7jJLiCbNnZTTROSwNA0iEK1H", // Moved API key to environment variable
         userAgent: 'https://www.npmjs.com/package/create-replicate'
     })
     const model = 'tencentarc/gfpgan:0fbacf7afc6c144e5be9767cff80f25aff23e52b0708f17e20f9879b2f21516c'
@@ -55,6 +59,20 @@ export default async function handler(
         scale: 2,
     }
     console.log({model, input})
+    const output = await replicate.run(model, {input}) as string[];
+    const handleOutput = (output: string[]) => {
+        if (!output || output.length === 0) {
+            return {success: false, message: "Failed to generate photo. Please try again later."};
+        }
+        const photoUrl = output[0];
+        return {success: true, photoUrl};
+    }
+    const result = handleOutput(output);
+    res.status(200).json(result);
+}
+
+
+
 
     // The rest of the code that interacts with the Replicate API is commented out.
     // If needed, it should be updated to use the new API key from the environment variable as well.
@@ -80,4 +98,3 @@ export default async function handler(
     //         await new Promise((resolve) => setTimeout(resolve, 1000));
     //     }
     // }
-}

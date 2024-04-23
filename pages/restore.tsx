@@ -2,7 +2,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { NextPage } from "next";
 import Head from "next/head";
 import Image from "next/image";
-import { useState } from "react";
+import React, { useState } from "react";
 import CountUp from "react-countup";
 import { UploadDropzone } from "react-uploader";
 import { Uploader } from "uploader";
@@ -78,11 +78,11 @@ const Home: NextPage = () => {
       body: JSON.stringify({ imageUrl: fileUrl }),
     });
 
-    let newPhoto = await res.json();
+    const response = await res.json();
     if (res.status !== 200) {
-      setError(newPhoto);
+      setError(response.message);
     } else {
-      setRestoredImage(newPhoto);
+      setRestoredImage(response.photoUrl); // Nastavíme URL obrázka na hodnotu vrátenú z API
     }
     setLoading(false);
   }
@@ -115,7 +115,7 @@ const Home: NextPage = () => {
           photos generated and counting.
         </p>
         <ResizablePanel>
-          <AnimatePresence exitBeforeEnter>
+          <AnimatePresence>
             <motion.div className="flex justify-between items-center w-full flex-col mt-4">
               <Toggle
                 className={`${restoredLoaded ? "visible" : "invisible"} mb-6`}
@@ -152,16 +152,17 @@ const Home: NextPage = () => {
                   </div>
                   <div className="sm:mt-0 mt-8">
                     <h2 className="mb-1 font-medium text-lg">Restored Photo</h2>
-                    <a href={restoredImage} target="_blank" rel="noreferrer">
-                      <Image
-                        alt="restored photo"
-                        src={restoredImage}
-                        className="rounded-2xl relative sm:mt-0 mt-2 cursor-zoom-in"
-                        width={475}
-                        height={475}
-                        onLoadingComplete={() => setRestoredLoaded(true)}
-                      />
-                    </a>
+                    {/*<a href={restoredImage} target="_blank" rel="noreferrer">*/}
+                    {/*  <Image*/}
+                    {/*    alt="restored photo"*/}
+                    {/*    src={restoredImage}*/}
+                    {/*    className="rounded-2xl relative sm:mt-0 mt-2 cursor-zoom-in"*/}
+                    {/*    width={475}*/}
+                    {/*    height={475}*/}
+                    {/*    onLoadingComplete={() => setRestoredLoaded(true)}*/}
+                    {/*  />*/}
+                    {/*</a>*/}
+                    <img src={restoredImage} alt="restoredImage" className="w-full"/>
                   </div>
                 </div>
               )}
