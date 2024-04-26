@@ -121,6 +121,12 @@ const Home = () => {
                             <motion.div className="flex justify-between items-center w-full flex-col mt-4">
                                 <div className="flex w-full">
                                     <div className="w-full">
+                                        <h1 className="mx-auto max-w-4xl font-display text-4xl font-bold tracking-normal text-slate-900 sm:text-6xl mb-5 text-center ">
+                                            Vyskúšajte svetoznámy model generovania fotiek Stable Diffusion
+                                        </h1>
+                                        <p className=" antialiased text-slate-500 pb-32">
+Vložte textový popis a model vygeneruje fotografiu na základe vášho popisu.
+                                        </p>
                                         <InputForm/>
                                     </div>
 

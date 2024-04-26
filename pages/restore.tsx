@@ -50,6 +50,9 @@ const Home: NextPage = () => {
   const [sideBySide, setSideBySide] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [photoName, setPhotoName] = useState<string | null>(null);
+  const [isUploaded, setIsUploaded] = useState<boolean>(false);
+
+
 
   const UploadDropZone = () => (
     <UploadDropzone
@@ -57,9 +60,9 @@ const Home: NextPage = () => {
       options={options}
       onUpdate={(file) => {
         if (file.length !== 0) {
-          setPhotoName(file[0].originalFile.originalFileName);
           setOriginalPhoto(file[0].fileUrl.replace("raw", "thumbnail"));
           generatePhoto(file[0].fileUrl.replace("raw", "thumbnail"));
+          setIsUploaded(true);
         }
       }}
       width="670px"
@@ -67,24 +70,32 @@ const Home: NextPage = () => {
     />
   );
 
+  function deleteImage() {
+    setOriginalPhoto(null);
+    setRestoredImage(null);
+    setIsUploaded(false);
+  }
   async function generatePhoto(fileUrl: string) {
-    await new Promise((resolve) => setTimeout(resolve, 5000));
     setLoading(true);
-    const res = await fetch("/api/restore", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ imageUrl: fileUrl }),
+    setError(null);
+    const response = await fetch('/api/restore', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        img: fileUrl,
+        version: "v1.4",
+        scale: 2
+      }),
     });
-
-    const response = await res.json();
-    if (res.status !== 200) {
-      setError(response.message);
-    } else {
-      setRestoredImage(response.photoUrl); // Nastavíme URL obrázka na hodnotu vrátenú z API
-    }
+    const output = await response.json();
+    console.log(output)
     setLoading(false);
+    if (response.ok) {
+      setRestoredImage(output);
+      console.log(output)
+    } else {
+      setError(output.message);
+    }
   }
 
   return (
@@ -96,24 +107,19 @@ const Home: NextPage = () => {
 
       <Header />
       <main className="flex flex-1 w-full flex-col items-center justify-center text-center px-4 mt-4 sm:mb-0 mb-8">
-        <a
-          href="https://youtu.be/FRQtFDDrUXQ"
-          target="_blank"
-          rel="noreferrer"
-          className="border rounded-2xl py-1 px-4 text-slate-500 text-sm mb-5 hover:scale-105 transition duration-300 ease-in-out"
-        >
-          Are you a developer and want to learn how I built this? Watch the{" "}
-          <span className="font-bold">YouTube tutorial</span>.
-        </a>
+
         <h1 className="mx-auto max-w-4xl font-display text-4xl font-bold tracking-normal text-slate-900 sm:text-6xl mb-5">
-          Restore any face photo
+          Upravte svoje fotografie pomocou umeléj inteligencie.
         </h1>
         <p className="text-slate-500">
-          {" "}
-          {/* Obtained this number from Vercel: based on how many serverless invocations happened. */}
-          <CountUp start={100000} end={325321} duration={2} separator="," />{" "}
-          photos generated and counting.
+          Nahrajte svoje fotografie a nechajte AI obnoviť ich kvalitu. AI je trénované na obnovu starých fotografií, odstránenie šumu a zlepšenie črtov tváre.
         </p>
+        {/*<p className="text-slate-500">*/}
+        {/*  {" "}*/}
+        {/*  /!* Obtained this number from Vercel: based on how many serverless invocations happened. *!/*/}
+        {/*  <CountUp start={100000} end={325321} duration={2} separator="," />{" "}*/}
+        {/*  photos generated and counting.*/}
+        {/*</p>*/}
         <ResizablePanel>
           <AnimatePresence>
             <motion.div className="flex justify-between items-center w-full flex-col mt-4">
@@ -134,8 +140,8 @@ const Home: NextPage = () => {
                   alt="original photo"
                   src={originalPhoto}
                   className="rounded-2xl"
-                  width={475}
-                  height={475}
+                  width={512}
+                  height={512}
                 />
               )}
               {restoredImage && originalPhoto && !sideBySide && (
@@ -146,8 +152,8 @@ const Home: NextPage = () => {
                       alt="original photo"
                       src={originalPhoto}
                       className="rounded-2xl relative"
-                      width={475}
-                      height={475}
+                      width={512}
+                      height={512}
                     />
                   </div>
                   <div className="sm:mt-0 mt-8">
@@ -162,7 +168,7 @@ const Home: NextPage = () => {
                     {/*    onLoadingComplete={() => setRestoredLoaded(true)}*/}
                     {/*  />*/}
                     {/*</a>*/}
-                    <img src={restoredImage} alt="restoredImage" className="w-full"/>
+                    <img src={restoredImage} alt="restoredImage" width={512} height={512}/>
                   </div>
                 </div>
               )}

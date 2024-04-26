@@ -57,6 +57,7 @@ type ModelProps = {
     description: string;
     imageUrl: string;
     link: string;
+    category: string;
 
 };
 
@@ -90,6 +91,7 @@ const ModelList: React.FC<ModelListProps> = ({ models }) => {
                     description={model.description}
                     imageUrl={model.imageUrl}
                     link={model.link}
+                    category={model.category}
 
                 />
             ))}
@@ -101,19 +103,26 @@ const ModelComponent: React.FC = () => {
     const [models, setModels] = React.useState<ModelProps[]>([]);
 
     useEffect(() => {
-        // Načítanie modelov (simulácia)
+        // Load models (simulation)
         const mockModels: ModelProps[] = [
-            { title: 'tencentarc/gfpgan', description: 'úprava fotiek a detailov tváre', imageUrl: 'https://i.imgur.com/lEVlLiw.png', link:"/restore" },
-            { title: 'stable diffusion', description: 'generovanie fotiek z textu', imageUrl: "https://i.imgur.com/GEQ0PGSl.png",link:"/generate" },
-            { title: 'nightmareai/real-esrgan', description: 'zväčšenie rozlíšenia fotky', imageUrl: "https://i.imgur.com/1H73uDC.png",link:"/realesrgan" },
-            { title: 'lucataco/realistic-vision-v5', description: 'generovanie realistických fotiek z textu', imageUrl: "https://replicate.delivery/pbxt/eVMzXJerAzpqnErNJ9P4ncWmd2d3OkGA31DKhG3ElQhLMIbRA/output.png",link:"/realvision" },
+            { title: 'tencentarc/gfpgan', description: 'úprava fotiek a zväčšanie rozlíšenia', imageUrl: 'https://i.imgur.com/lEVlLiw.png', link:"/restore", category:"Restore"},
+            { title: 'stable diffusion', description: 'generácia fotiek z textu', imageUrl: "https://i.imgur.com/GEQ0PGSl.png",link:"/generate", category:"Generate" },
+            { title: 'nightmareai/real-esrgan', description: 'zväčšenie rozlíšenia', imageUrl: "https://i.imgur.com/1H73uDC.png",link:"/realesrgan", category:"Restore" },
+            { title: 'lucataco/realistic-vision-v5', description: 'generácia realistických fotiek z textu', imageUrl: "https://replicate.delivery/pbxt/eVMzXJerAzpqnErNJ9P4ncWmd2d3OkGA31DKhG3ElQhLMIbRA/output.png",link:"/realvision", category:"Generate" },
         ];
         setModels(mockModels);
     }, []);
 
+    // Filter models based on category
+    const restoreModels = models.filter(model => model.category === 'Restore');
+    const generateModels = models.filter(model => model.category === 'Generate');
+
     return (
         <div>
-            <ModelList models={models} />
+            <h2 className="text-3xl antialiased font-bold pb-12">Restore Models</h2>
+            <ModelList models={restoreModels} />
+            <h2 className="text-3xl antialiased font-bold pb-12">Generate Models</h2>
+            <ModelList models={generateModels} />
         </div>
     );
 };

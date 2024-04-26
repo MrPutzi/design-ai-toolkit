@@ -71,9 +71,11 @@ const Home = () => {
                                     </a>
                                 ) : null}
                                 {error && <p className="text-red-500">{error}</p>}
+                                <h2 className="text-3xl antialiased font-bold ">Generácia reálnych fotiek ľudí.</h2>
+                                <p className=" antialiased text-slate-500 pb-32">Daný model umelej inteligencie pracuje pomalšie a preto je potrebné na vygenerovanú fotku počkať o niečo dlhšie. Niekedy to môže trvať až 2 či 3 minúty na načítanie obrázku</p>
                                 <input
                                     type="text"
-                                    placeholder="Describe your image"
+                                    placeholder="Opíš svoj obrázok..."
                                     value={inputPrompt}
                                     onChange={(e) => setInputPrompt(e.target.value)}
                                     className="w-full border border-gray-300 rounded-lg px-4 py-2 mb-5"
@@ -89,7 +91,7 @@ const Home = () => {
                                         <span className="pt-4">
                                             <LoadingDots color="white" style="large"/>
                                         </span>
-                                    ) : 'Generate Image'}
+                                    ) : 'Generovať'}
                                 </button>
                             </div>
                         </motion.div>

@@ -1,6 +1,7 @@
 import React, {useCallback, useState} from 'react';
 import LoadingDots from "./LoadingDots";
 import  generatePhoto  from "../pages/api/generate";
+import dotenv from "dotenv";
 
 interface FormData {
     width: number;
@@ -226,9 +227,11 @@ const InputForm: React.FC = () => {
                         name="numInterferenceSteps"
                         min="1"
                         max="50"
-                        value={formData.numInterferenceSteps}
+                        value={formData.numInterferenceSteps} defaultValue="20"//add a check for this value to be greater than 0
                         onChange={handleChange}
                         className="w-full mb-2"
+
+
                     />
                     <span className="inline-block ml-2">{formData.numInterferenceSteps}</span>
                 </div>

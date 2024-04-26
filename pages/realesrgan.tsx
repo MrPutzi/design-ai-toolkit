@@ -38,6 +38,7 @@ const Home: NextPage = () => {
     const [loading, setLoading] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
     const [photoName, setPhotoName] = useState<string | null>(null);
+    const [isUploaded, setIsUploaded] = useState<boolean>(false);
 
     const UploadDropZone = () => (
         <UploadDropzone
@@ -45,17 +46,23 @@ const Home: NextPage = () => {
             options={options}
             onUpdate={(file) => {
                 if (file.length !== 0) {
-                    setPhotoName(file[0].originalFile.originalFileName);
                     setOriginalPhoto(file[0].fileUrl.replace("raw", "thumbnail"));
                     generatePhoto(file[0].fileUrl.replace("raw", "thumbnail"));
+                    setIsUploaded(true);
                 }
             }}
             width="670px"
             height="250px"
 
+
         />
     );
 
+    function deleteImage() {
+        setOriginalPhoto(null);
+        setUpscaledPhoto(null);
+        setIsUploaded(false);
+    }
 
 
     // async function generatePhoto(fileUrl: string) {
@@ -78,44 +85,101 @@ const Home: NextPage = () => {
     //         setError(data.message);
     //     }
     // }
+
+
+    // async function generatePhoto(fileUrl: string) {
+    //     setLoading(true);
+    //     setError(null);
+    //     setUpscaledPhoto(null);
+    //     const response = await fetch('/api/realesrgan', {
+    //         method: 'POST',
+    //         headers: {
+    //             'Content-Type': 'application/json',
+    //         },
+    //         body: JSON.stringify({ input: { image: fileUrl, scale: 2, face_enhance: false }}),
+    //     });
+    //     console.log(response)
+    //     if (!response.ok) {
+    //         setLoading(false);
+    //         setError('Error: ' + response.statusText);
+    //         return;
+    //     }
+    //
+    //     let data = await response.json();
+    //     setLoading(false);
+    //     if (data.success) {
+    //         setUpscaledPhoto(data.output);
+    //     } else {
+    //         setError(data.message);
+    //     }
+    // }
+// async function generatePhoto(fileUrl: string) {
+//     fetch('/api/realesrgan', {
+//         method: 'POST',
+//         headers: {'Content-Type': 'application/json'},
+//         body: JSON.stringify({
+//             image: fileUrl,
+//             scale: 2,
+//             faceEnhance: false,
+//         }),
+//     })
+//         .then(response => response.json())
+//         .then(output => console.log(output))
+//         .catch(error => console.error(error));
+// }
     async function generatePhoto(fileUrl: string) {
         setLoading(true);
         setError(null);
-        setUpscaledPhoto(null);
         const response = await fetch('/api/realesrgan', {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ input: { image: fileUrl, scale: 2, face_enhance: false }}),
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+                image: fileUrl,
+                scale: 2,
+                faceEnhance: false,
+            }),
         });
-        console.log(response)
-        if (!response.ok) {
-            setLoading(false);
-            setError('Error: ' + response.statusText);
-            return;
-        }
-
-        let data = await response.json();
+        const output = await response.json();
+        console.log(output)
         setLoading(false);
-        if (data.success) {
-            setUpscaledPhoto(data.output);
+        if (response.ok) {
+            setUpscaledPhoto(output);
+            console.log(output)
         } else {
-            setError(data.message);
+            setError(output.message);
         }
     }
-
-
 
     return (
         <div className="flex max-w-6xl mx-auto flex-col items-center justify-center py-2 min-h-screen">
             <Head>
                 <title>Real-ESRGAN</title>
-                <link rel="icon" href="/favicon.ico" />
+                <link rel="icon" href="/favicon.ico"/>
             </Head>
-            <Header />
-            <main className="flex flex-1 w-full flex-col items-center justify-center text-center px-4 mt-4 sm:mb-0 mb-8">
-                <UploadDropZone />
+            <Header/>
+            {/*<main className="flex flex-1 w-full flex-col items-center justify-center text-center px-4 mt-4 sm:mb-0 mb-8">*/}
+            {/*    <UploadDropZone />*/}
+            <h1 className="mx-auto max-w-4xl font-display text-4xl font-bold tracking-normal text-slate-900 sm:text-6xl mb-5 text-center ">Nechajte si zväčšiť rozlíšenie vašej fotografie behom pár sekúnd</h1>
+            <p className=" antialiased text-slate-500 pb-32">Jednoducho nahrajte fotografiu ktorej chcete zväčšiť počet pixelov a následne si ju môžte stiahnuť.</p>
+            <main
+                className="flex flex-1 w-full flex-col items-center justify-center text-center px-4 mt-4 sm:mb-0 mb-8">
+                {isUploaded ? (
+                    <>
+                        <button onClick={deleteImage}>Delete Image</button>
+                        {upscaledPhoto && <button><a href={upscaledPhoto} download>Download Image</a></button>}
+                    </>
+                ) : (
+
+                    <UploadDropzone uploader={uploader} options={options} onUpdate={(file) => {
+                        if (file.length !== 0) {
+                            setOriginalPhoto(file[0].fileUrl.replace("raw", "thumbnail"));
+                            generatePhoto(file[0].fileUrl.replace("raw", "thumbnail"));
+                            setIsUploaded(true);
+                        }
+
+                    }} width="670px" height="250px"
+                    />
+                )}
                 <ResizablePanel>
                     <AnimatePresence>
                         <motion.div className="flex justify-between items-center w-full flex-col mt-4">
@@ -140,7 +204,7 @@ const Home: NextPage = () => {
                                 </div>
                                 {loading && (
                                     <div className="flex justify-center items-center w-full mt-4">
-                                        <LoadingDots  color={"black"} style={"large"}/>
+                                        <LoadingDots color={"black"} style={"large"}/>
                                     </div>
                                 )}
                                 {upscaledPhoto && (
@@ -170,11 +234,10 @@ const Home: NextPage = () => {
                     </AnimatePresence>
                 </ResizablePanel>
             </main>
-            <Footer />
+            <Footer/>
         </div>
     );
 }
-
 
 
 export default Home;
