@@ -14,104 +14,135 @@ import appendNewToName from "../utils/appendNewToName";
 import downloadPhoto from "../utils/downloadPhoto";
 import va from "@vercel/analytics";
 import GeneratedPhoto from "../components/GeneratedPhoto";
+import InputForm from "../components/InputForm";
 
-const Home = () =>{
+const Home = () => {
 
-    const [generatedPhoto, setGeneratedPhoto] = useState<string | undefined>(undefined); // State for generated photo URL
-    const [loading, setLoading] = useState<boolean>(false);
-    const [restoredLoaded, setRestoredLoaded] = useState<boolean>(false);
-    const [sideBySide, setSideBySide] = useState<boolean>(false);
-    const [error, setError] = useState<string | null>(null);
-    const [photoName, setPhotoName] = useState<string | null>(null);
-    const [inputPrompt, setInputPrompt] = useState<string>(''); // State for text prompt
 
-    async function generatePhoto() {
-        await new Promise((resolve) => setTimeout(resolve, 10));
-        if (!inputPrompt) {
-            setError('Please enter a description for your image.');
-            return;
+
+    // interface FormData {
+    //     width: number;
+    //     height: number;
+    //     prompt: string;
+    //     scheduler: string;
+    //     numInterferenceSteps: number;
+    //     refine: string;
+    //     lora_scale: number;
+    //     guidance_scale: number;
+    //     apply_watermark: boolean;
+    //     high_noise_frac: number;
+    //     negative_prompt: string;
+    //     prompt_strength: number;
+    //     num_inference_steps: number;
+    //     num_outputs: number;
+    // }
+
+    // const InputForm: React.FC = () => {
+    //     const [formData, setFormData] = useState<FormData>({
+    //         numInterferenceSteps: 0,
+    //         width: 768,
+    //         height: 768,
+    //         prompt: '',
+    //         refine: 'expert_ensemble_refiner',
+    //         scheduler: 'K_EULER',
+    //         lora_scale: 0.6,
+    //         num_outputs: 1,
+    //         guidance_scale: 7.5,
+    //         apply_watermark: false,
+    //         high_noise_frac: 0.8,
+    //         negative_prompt: '',
+    //         prompt_strength: 0.8,
+    //         num_inference_steps: 25
+    //     });
+
+        const [generatedPhoto, setGeneratedPhoto] = useState<string | undefined>(undefined); // State for generated photo URL
+        const [loading, setLoading] = useState<boolean>(false);
+        const [restoredLoaded, setRestoredLoaded] = useState<boolean>(false);
+        const [sideBySide, setSideBySide] = useState<boolean>(false);
+        const [error, setError] = useState<string | null>(null);
+        const [inputPrompt, setInputPrompt] = useState<string>(''); // State for text prompt
+        const [width, setWidth] = useState<number>(512);
+        const [height, setHeight] = useState<number>(512);
+        const [numOutputs, setNumOutputs] = useState<number>(1);
+        const [scheduler, setScheduler] = useState<string>('K_EULER');
+        const [numInterferenceSteps, setNumInterferenceSteps] = useState<number>(25);
+
+
+        // const handleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+        //     setFormData({
+        //         ...formData,
+        //         [event.target.name]: event.target.type === 'number' ?
+        //             parseInt(event.target.value, 10) : event.target.value,
+        //     });
+        // };
+
+
+        // async function generatePhoto() {
+        //     await new Promise((resolve) => setTimeout(resolve, 10));
+        //     if (!inputPrompt) {
+        //         setError('Please enter a description for your image.');
+        //         return;
+        //     }
+        //     setLoading(true);
+        //     setError(null);
+        //     setGeneratedPhoto(undefined);
+        //     const response = await fetch('/api/generate', {
+        //         method: 'POST',
+        //         headers: {
+        //             'Content-Type': 'application/json',
+        //         },
+        //         body: JSON.stringify({prompt: inputPrompt}),
+        //     });
+        //     let data = await response.json();
+        //     setLoading(false);
+        //     if (response.ok) {
+        //         setGeneratedPhoto(data.photoUrl);
+        //     } else {
+        //         setError(data.message);
+        //     }
+        // }
+
+        function onImageLoadError() {
+            setError('Failed to load image.');
+            setGeneratedPhoto(undefined);
         }
-        setLoading(true);
-        setError(null);
-        setGeneratedPhoto(undefined);
-        const response = await fetch('/api/generate', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ prompt: inputPrompt }),
-        });
-        let data = await response.json();
-        setLoading(false);
-        if (response.ok) {
-            setGeneratedPhoto(data.photoUrl);
-        } else {
-            setError(data.message);
-        }
-    }
 
-    function onImageLoadError() {
-        setError('Failed to load image.');
-        setGeneratedPhoto(undefined);
-    }
+        return (
+            <div className="flex max-w-6xl mx-auto flex-col items-center justify-center py-2 min-h-screen">
+                <Head>
+                    <title>Generate Photos</title>
+                    <link rel="icon" href="/favicon.ico"/>
+                </Head>
+                <Header/>
+                <main
+                    className="flex flex-1 w-full flex-col items-center justify-center text-center px-4 mt-4 sm:mb-0 mb-8">
+                    <ResizablePanel>
+                        <AnimatePresence>
+                            <motion.div className="flex justify-between items-center w-full flex-col mt-4">
+                                <div className="flex w-full">
+                                    <div className="w-full">
+                                        <h1 className="mx-auto max-w-4xl font-display text-4xl font-bold tracking-normal text-slate-900 sm:text-6xl mb-5 text-center ">
+                                            Vyskúšajte svetoznámy model generovania fotiek Stable Diffusion
+                                        </h1>
+                                        <p className=" antialiased text-slate-500 pb-32">
+Vložte textový popis a model vygeneruje fotografiu na základe vášho popisu.
+                                        </p>
+                                        <InputForm/>
+                                    </div>
 
-    return (
-        <div className="flex max-w-6xl mx-auto flex-col items-center justify-center py-2 min-h-screen">
-            <Head>
-                <title>Generate Photos</title>
-                <link rel="icon" href="/favicon.ico" />
-            </Head>
-            <Header />
-            <main className="flex flex-1 w-full flex-col items-center justify-center text-center px-4 mt-4 sm:mb-0 mb-8">
+                                </div>
+                            </motion.div>
 
-                <ResizablePanel>
-                    <AnimatePresence>
-                        <motion.div className="flex justify-between items-center w-full flex-col mt-4">
-                            <div className="w-full">
-                                {generatedPhoto ? (
-                                    <a href={generatedPhoto} target="_blank" rel="noreferrer">
-                                        <Image
-                                               alt="Generated Image"
-                                               src={generatedPhoto}
-                                               width={512}
-                                               height={512}
-                                               className="rounded-lg"
-                                               onLoadingComplete={() => setRestoredLoaded(true)}
-                                               onError={onImageLoadError}
-                                        />
-                                    </a>
-                                ) : null}
-                                {error && <p className="text-red-500">{error}</p>}
-                                <input
-                                    type="text"
-                                    placeholder="Describe your image"
-                                    value={inputPrompt}
-                                    onChange={(e) => setInputPrompt(e.target.value)}
-                                    className="w-full border border-gray-300 rounded-lg px-4 py-2 mb-5"
-                                />
+                        </AnimatePresence>
+                    </ResizablePanel>
+                </main>
+                <Footer/>
+            </div>
 
 
-                                <button
-                                    onClick={generatePhoto}
-                                    disabled={loading}
-                                    className="bg-black rounded-full text-white font-medium px-4 pt-2 pb-3 w-40"
-                                >
-                                    {loading ? (
-                                        <span className="pt-4">
-                                            <LoadingDots color="white" style="large"/>
-                                        </span>
-                                    ) : 'Generate Image'}
-                                </button>
-                            </div>
-                        </motion.div>
-                    </AnimatePresence>
-                </ResizablePanel>
-            </main>
-            <Footer/>
-        </div>
+        );
 
 
-    );
 }
 
 export default Home;

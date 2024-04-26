@@ -4,6 +4,7 @@ import requestIp from "request-ip";
 import {NextApiRequest, NextApiResponse} from "next";
 import {Ratelimit} from "@upstash/ratelimit";
 import redis from "../../utils/redis";
+import {dot} from "@tensorflow/tfjs";
 dotenv.config()
 
 interface ExtendedNextApiRequest extends NextApiRequest {
@@ -42,8 +43,10 @@ export default async function handler (
         }
     }
 
+
+
     const replicate = new Replicate({
-        auth: "r8_QODWLhOyB1bnz2kIpNnK740PcuHM1E94ZKCVw", // Moved API key to environment variable
+        auth: process.env.REPLICATE_API_KEY,
         userAgent: 'https://www.npmjs.com/package/create-replicate'
     })
     const model = 'stability-ai/sdxl:39ed52f2a78e934b3ba6e2a89f5b1c712de7dfea535525255b1aa35c5565e08b'

@@ -9,6 +9,7 @@ import { Testimonials } from "../components/Testimonials";
 import ModelComponent from "../components/ModelComponent";
 import { div } from "@tensorflow/tfjs";
 import {useState} from "react";
+import NadpisAI from "../components/NadpisAI";
 
 const Home: NextPage = () => {
     const [email, setEmail] = useState('')
@@ -45,55 +46,58 @@ const Home: NextPage = () => {
             </Head>
 
             <Header />
+            <main className="flex flex-1 w-full flex-col items-center justify-center text-center px-4 sm:mt-28 mt-20">
+                <NadpisAI />
 
-            <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
-                <div className="sm:mx-auto sm:w-full sm:max-w-sm">
+                <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
+                    <div className="sm:mx-auto sm:w-full sm:max-w-sm">
 
-                    <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
-                        Sign in to your account
-                    </h2>
+                        <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
+                            Prihláste sa do svojho účtu
+                        </h2>
+                    </div>
+
+                    <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+                        <form className="space-y-6" action="#" method="POST" onSubmit={handleSubmit}>
+                            <div>
+                                <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">
+                                </label>
+                                <label style={{display: 'block', marginBottom: '10px'}}>
+                                    Email:
+                                    <input
+                                        type="email"
+                                        value={email}
+                                        onChange={(e) => setEmail(e.target.value)}
+                                        required
+                                        style={{display: 'block', width: '100%', padding: '10px'}}
+                                    />
+                                </label>
+                                <label style={{display: 'block', marginBottom: '10px'}}>
+                                    Heslo:
+                                    <input
+                                        type="password"
+                                        value={password}
+                                        onChange={(e) => setPassword(e.target.value)}
+                                        required
+                                        style={{display: 'block', width: '100%', padding: '10px'}}
+                                    />
+                                </label>
+                                <button type="submit">Login</button>
+                            </div>
+                        </form>
+
+                        <p className="mt-10 text-center text-sm text-gray-500">
+                            Nie ste u nás registrovaný ?{' '}
+                            <a href="#" className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500">
+                                Zaregistrujte sa tu a získajte zdarma <b>30 kreditov</b>.{' '}
+                            </a>
+                        </p>
+                    </div>
+
                 </div>
-
-                <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-                    <form className="space-y-6" action="#" method="POST" onSubmit={handleSubmit}>
-                        <div>
-                            <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">
-                            </label>
-                            <label style={{display: 'block', marginBottom: '10px'}}>
-                                Email:
-                                <input
-                                    type="email"
-                                    value={email}
-                                    onChange={(e) => setEmail(e.target.value)}
-                                    required
-                                    style={{display: 'block', width: '100%', padding: '10px'}}
-                                />
-                            </label>
-                            <label style={{display: 'block', marginBottom: '10px'}}>
-                                Password:
-                                <input
-                                    type="password"
-                                    value={password}
-                                    onChange={(e) => setPassword(e.target.value)}
-                                    required
-                                    style={{display: 'block', width: '100%', padding: '10px'}}
-                                />
-                            </label>
-                            <button type="submit">Login</button>
-                        </div>
-                    </form>
-
-                    <p className="mt-10 text-center text-sm text-gray-500">
-                        Not a member?{' '}
-                        <a href="#" className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500">
-                            Start a 14 day free trial
-                        </a>
-                    </p>
-                </div>
-
-            </div>
+            </main>
         </div>
-    )
+)
 }
 
 

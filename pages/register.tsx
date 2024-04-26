@@ -8,6 +8,7 @@ import SquigglyLines from "../components/SquigglyLines";
 import { Testimonials } from "../components/Testimonials";
 import ModelComponent from "../components/ModelComponent";
 import RegisterForm from "../components/RegisterForm";
+import NadpisAI from "../components/NadpisAI";
 
 const Home: NextPage = () => {
     // const models = [
@@ -24,14 +25,7 @@ const Home: NextPage = () => {
             <Header />
             <main className="flex flex-1 w-full flex-col items-center justify-center text-center px-4 sm:mt-28 mt-20">
 
-          {/*      <h1 className="mx-auto max-w-4xl font-display text-5xl font-bold tracking-normal text-slate-900 sm:text-7xl">*/}
-          {/*          {" "}*/}
-          {/*          <span className="relative whitespace-nowrap text-[#3290EE]">*/}
-          {/*  <SquigglyLines />*/}
-          {/*  <span className="relative l leading-none">Umelá <br/> inteligencia</span>*/}
-          {/*</span>{" "}*/}
-          {/*          na dosah ruky.*/}
-          {/*      </h1>*/}
+                <NadpisAI />
 
 
                 <div className="flex justify-center space-x-4">
