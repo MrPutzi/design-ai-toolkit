@@ -16,7 +16,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             id: Date.now().toString(),
             email: email,
             password: hashedPassword,
+            credit: 50
         }
+
 
         // Read the users.json file
         const usersFilePath = path.join(process.cwd(), 'users.json')

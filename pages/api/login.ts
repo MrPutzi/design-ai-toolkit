@@ -32,6 +32,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         if (!passwordMatches) {
             res.status(400).json({ message: 'Invalid email or password.' })
+            alert('Invalid credentials')
             return
         }
 

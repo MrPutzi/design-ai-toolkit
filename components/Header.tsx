@@ -1,4 +1,4 @@
-import {LoginLink, RegisterLink} from "@kinde-oss/kinde-auth-nextjs";
+import { LoginLink, RegisterLink } from "@kinde-oss/kinde-auth-nextjs";
 import Image from "next/image";
 import Link from "next/link";
 import React, { useContext } from "react";
@@ -9,7 +9,7 @@ export default function Header() {
     const user = userContext?.user;
 
     return (
-        <header className=" flex justify-between items-center w-full border-b-2 border-double bor pb-7 sm:px-4 px-2  ">
+        <header className="flex justify-between items-center w-full border-b-2 border-double bor pb-7 sm:px-4 px-2">
             <Link href="/">
                 <div className="flex space-x-2">
                     <Image
@@ -19,7 +19,7 @@ export default function Header() {
                         width={36}
                         height={36}
                     />
-                    <h1 className="sm:text-5xl text-3xl font-bold ml-2   ">
+                    <h1 className="sm:text-5xl text-3xl font-bold ml-2">
                         <span className="bg-clip-text text-transparent bg-gradient-to-r from-pink-700 to-violet-800">
                             DESIGN + AI Toolkit
                         </span>
@@ -31,18 +31,21 @@ export default function Header() {
                     <>
                         <img src="/profile-icon.png" alt="Profile" />
                         <span>{user.email}</span>
+                        <span>Credit: {user.credit}</span> {/* Add this line to display the user's credit */}
                     </>
                 ) : (
                     <>
                         <Link href="/login">
                             <button
-                                className="bg-gradient-to-r from-pink-700 to-violet-800 hover:bg-gradient-to-tl text-white font-semibold py-2 px-4 border border-gray-400 rounded shadow">
+                                className="bg-gradient-to-r from-pink-700 to-violet-800 hover:bg-gradient-to-tl text-white font-semibold py-2 px-4 border border-gray-400 rounded shadow"
+                            >
                                 Login
                             </button>
                         </Link>
                         <Link href="/register">
                             <button
-                                className="bg-gradient-to-r from-pink-700 to-violet-800 hover:bg-gradient-to-tl text-white font-semibold py-2 px-4 border border-gray-400 rounded shadow">
+                                className="bg-gradient-to-r from-pink-700 to-violet-800 hover:bg-gradient-to-tl text-white font-semibold py-2 px-4 border border-gray-400 rounded shadow"
+                            >
                                 Register
                             </button>
                         </Link>

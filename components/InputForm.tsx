@@ -139,8 +139,8 @@ const InputForm: React.FC = () => {
         //     </div>
 
 
-    <div className="flex">
-        <div className="w-1/2 p-4 border-r-2 border-gray-200">
+    <div className="flex  ">
+        <div className="w-1/2 p-4 border-gray-300 border-2 rounded-xl ">
             <form onSubmit={handleSubmit}>
             <div className="form-group">
                     <label htmlFor="inputPrompt">Image Prompt:</label>
@@ -150,7 +150,7 @@ const InputForm: React.FC = () => {
                         name="prompt" // Zmenené z "inputPrompt" na "prompt"
                         value={formData.prompt}
                         onChange={handleChange}
-                        className="w-full border border-gray-300 rounded-lg px-4 py-2 mb-2"
+                        className="w-full border border-gray-500 rounded-lg px-4 py-2 mb-2"
                     />
                 </div>
 
@@ -250,9 +250,9 @@ const InputForm: React.FC = () => {
             </form>
 
         </div>
-        <div className="w-1/2 ">
-            {generatedPhoto && <img src={generatedPhoto} alt="Generated" className="w-full"/>}
+        <div className="w-1/2  border-gray-300 border-2 rounded-xl ">
         </div>
+        {generatedPhoto && <img src={generatedPhoto} alt="Generated" className="w-full"/>}
     </div>
 )
     ;
