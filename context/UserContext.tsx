@@ -3,6 +3,7 @@ import React from 'react';
 type UserState = {
     email: string;
     password: string;
+    credit: number; // Add this line
 } | null;
 
 export type UserContextType = {
@@ -11,3 +12,5 @@ export type UserContextType = {
 };
 
 export const UserContext = React.createContext<UserContextType | undefined>(undefined);
+
+

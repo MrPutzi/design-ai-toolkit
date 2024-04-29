@@ -14,6 +14,7 @@ import NadpisAI from "../components/NadpisAI";
 const Home: NextPage = () => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
+    
 
     const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault()
@@ -35,7 +36,8 @@ const Home: NextPage = () => {
             localStorage.setItem('token', data.token)
             // Redirect the user to the home page or dashboard
         } else {
-            // Handle error
+            alert('Invalid credentials')
+
         }
     }
 
@@ -98,8 +100,8 @@ const Home: NextPage = () => {
             </main>
         </div>
 )
-}
 
+}
 
 
 export default Home;

@@ -56,7 +56,7 @@ const Home = () => {
                 <ResizablePanel>
                     <AnimatePresence>
                         <motion.div className="flex justify-between items-center w-full flex-col mt-4">
-                            <div className="w-full">
+                            <div className="w-full p-4 border-gray-300 border-2 rounded-xl ">
                                 {generatedPhoto ? (
                                     <a href={generatedPhoto} target="_blank" rel="noreferrer">
                                         <Image
