@@ -1,6 +1,8 @@
-import Replicate from "replicate";
 import { ReplicateStream, StreamingTextResponse } from "ai";
+import chatForm from "../../components/ChatForm";
+import Replicate from "replicate";
 export const runtime = "edge";
+
 
 const replicate = new Replicate({
   auth: process.env.REPLICATE_API_TOKEN,
@@ -8,17 +10,36 @@ const replicate = new Replicate({
 
 if (!process.env.REPLICATE_API_TOKEN) {
   throw new Error(
-    "The REPLICATE_API_TOKEN environment variable is not set. See README.md for instructions on how to set it."
+      "The REPLICATE_API_TOKEN environment variable is not set. See README.md for instructions on how to set it."
   );
 }
+
+const { GoogleGenerativeAI } = require("@google/generative-ai");
+const genAi = new GoogleGenerativeAI(process.env.GOOGLE_GENERATIVE_AI_API_KEY);
+
+async function runGoogleGenerativeAI(){
+  const model = genAi.getGenerativeModel({model: "gemini-pro"});
+const response = await model.generateText({
+    prompt: chatForm.prompt,
+    max_tokens: 100,
+    temperature: 0.5,
+    top_p: 1,
+    frequency_penalty: 0,
+    presence_penalty: 0,
+    stop: ["\n"]
+});
+console.log(response.data);
+return response.data;
+}
+
 
 const { TURNSTILE_CHALLENGE_ENDPOINT, TURNSTILE_SECRET_KEY } = process.env;
 
 const VERSIONS = {
   "yorickvp/llava-13b":
-    "e272157381e2a3bf12df3a8edd1f38d1dbd736bbb7437277c8b34175f8fce358",
+      "e272157381e2a3bf12df3a8edd1f38d1dbd736bbb7437277c8b34175f8fce358",
   "nateraw/salmonn":
-    "ad1d3f9d2bd683628242b68d890bef7f7bd97f738a7c2ccbf1743a594c723d83",
+      "ad1d3f9d2bd683628242b68d890bef7f7bd97f738a7c2ccbf1743a594c723d83",
 };
 
 async function verifyTurnstile(token, ip, idempotencyKey) {
@@ -69,13 +90,13 @@ export async function POST(req) {
 }
 
 async function runLlama({
-  model,
-  prompt,
-  systemPrompt,
-  maxTokens,
-  temperature,
-  topP,
-}) {
+                          model,
+                          prompt,
+                          systemPrompt,
+                          maxTokens,
+                          temperature,
+                          topP,
+                        }) {
   console.log("running llama");
   console.log("model", model);
   console.log("maxTokens", maxTokens);
@@ -87,8 +108,8 @@ async function runLlama({
       prompt: `${prompt}`,
       max_new_tokens: maxTokens,
       ...(model.includes("llama3")
-        ? { max_tokens: maxTokens }
-        : { max_new_tokens: maxTokens }),
+          ? { max_tokens: maxTokens }
+          : { max_new_tokens: maxTokens }),
       temperature: temperature,
       repetition_penalty: 1,
       top_p: topP,
