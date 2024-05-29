@@ -1,6 +1,5 @@
 import { NextPage } from "next";
 import Head from "next/head";
-import Image from "next/image";
 import Link from "next/link";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
@@ -39,47 +38,14 @@ const Home: NextPage = () => {
           pomocou umelej inteligencie.
 
         </p>
-        {/*<div className="flex justify-center space-x-4">*/}
-        {/*  <a*/}
-        {/*    className="bg-white rounded-xl text-black font-medium px-4 py-3 sm:mt-10 mt-8 hover:bg-gray-100 border"*/}
-        {/*    href="https://youtu.be/FRQtFDDrUXQ"*/}
-        {/*    target="_blank"*/}
-        {/*    rel="noreferrer"*/}
-        {/*  >*/}
-        {/*    Learn how it's built*/}
-        {/*  </a>*/}
 
-        {/*  <Link*/}
-        {/*    className="bg-black rounded-xl text-white font-medium px-4 py-3 sm:mt-10 mt-8 hover:bg-black/80"*/}
-        {/*    href="/restore"*/}
-        {/*  >*/}
-        {/*    Restore your photos*/}
-        {/*  </Link>*/}
-        {/*</div>*/}
         <div className="flex justify-between items-center w-full flex-col sm:mt-10 mt-6">
           <div className="flex flex-col space-y-10 mt-4 mb-16">
             <div className="flex sm:space-x-2 sm:flex-row flex-col">
               <div>
                 {/*<ModelList models={models} />*/}
                 <ModelComponent />
-                {/*<h2 className="mb-1 font-medium text-lg">Original Photo</h2>*/}
-              {/*  <Image*/}
-              {/*    alt="Original photo of my bro"*/}
-              {/*    src="/michael.jpg"*/}
-              {/*    className="w-96 h-96 rounded-2xl"*/}
-              {/*    width={400}*/}
-              {/*    height={400}*/}
-              {/*  />*/}
-              {/*</div>*/}
-              {/*<div className="sm:mt-0 mt-8">*/}
-              {/*  <h2 className="mb-1 font-medium text-lg">Restored Photo</h2>*/}
-              {/*  <Image*/}
-              {/*    alt="Restored photo of my bro"*/}
-              {/*    width={400}*/}
-              {/*    height={400}*/}
-              {/*    src="/michael-new.jpg"*/}
-              {/*    className="w-96 h-96 rounded-2xl sm:mt-0 mt-2"*/}
-              {/*  />*/}
+
               </div>
             </div>
           </div>
