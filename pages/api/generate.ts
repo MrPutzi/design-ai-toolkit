@@ -79,6 +79,8 @@ export default async function handler (
 
     const generatedPhotoData = handleOutput(output);
     saveImage({id: Date.now(), url: generatedPhotoData.photoUrl!});
+    // download the image and save it to the storage
+
     res.status(200).json(generatedPhotoData);
 
 }

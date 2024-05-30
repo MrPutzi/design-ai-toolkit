@@ -109,7 +109,7 @@ const ModelComponent: React.FC = () => {
             { title: 'stable diffusion', description: 'generácia fotiek z textu', imageUrl: "https://i.imgur.com/GEQ0PGSl.png",link:"/generate", category:"Generate" },
             { title: 'nightmareai/real-esrgan', description: 'zväčšenie rozlíšenia', imageUrl: "https://i.imgur.com/1H73uDC.png",link:"/realesrgan", category:"Restore" },
             { title: 'lucataco/realistic-vision-v5', description: 'generácia realistických fotiek z textu', imageUrl: "https://replicate.delivery/pbxt/eVMzXJerAzpqnErNJ9P4ncWmd2d3OkGA31DKhG3ElQhLMIbRA/output.png",link:"/realvision", category:"Generate" },
-            // { title: "lama/chat-gpt", description: "page", imageUrl: "https://i.imgur.com/1H73uDC.png", link: "/page", category: "Generate" },
+            { title: "lama/chat-gpt", description: "page", imageUrl: "https://i.imgur.com/1H73uDC.png", link: "/page", category: "Generate" },
         ];
         setModels(mockModels);
     }, []);

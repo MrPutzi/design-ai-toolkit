@@ -1,4 +1,3 @@
-import fs from 'fs'
 import path from 'path'
 
 interface Image {
@@ -6,18 +5,31 @@ interface Image {
     url: string;
 }
 
-export function getImages() {
-    const imagesFilePath = path.join(process.cwd(), 'generatedImages.json')
-    const imagesFile = fs.readFileSync(imagesFilePath, 'utf8')
-    const images: Image[] = imagesFile ? JSON.parse(imagesFile) : []
-    return images.map((image) => image.url)
+// download the image into a folder and save the path to the storage
+export async function saveImage(url: string) {
+    const fs = require('fs');
+    const imagesFolderPath = path.join(process.cwd(), 'public', 'generatedImages')
+    if (!fs.existsSync(imagesFolderPath)) {
+        fs.mkdirSync(imagesFolderPath)
+    }
+    const imageId = Date.now()
+    const imageFilePath = path.join(imagesFolderPath, `${imageId}.png`)
+    fs.writeFileSync
+    (imageFilePath, url)
+    return imageId
 }
 
-export function saveImage(image: Image) {
-    const imagesFilePath = path.join(process.cwd(), 'generatedImages.json')
-    const imagesFile = fs.readFileSync(imagesFilePath, 'utf8')
-    const images: Image[] = imagesFile ? JSON.parse(imagesFile) : []
-    images.push(image)
-    fs.writeFileSync(imagesFilePath, JSON.stringify(images))
+export async function getImagesIds() {
+    //get the ids of the images from the whole folder
+    const fs = require('fs');
+    const imagesFolderPath = path.join(process.cwd(), 'public', 'generatedImages')
+    const images = fs.readdirSync(imagesFolderPath)
+    return images.map(image => image.split('.')[0])
 }
 
+export function getImage(image: { id: string; url: string }) {
+    const fs = require('fs');
+    const imagesFolderPath = path.join(process.cwd(), 'public', 'generatedImages')
+    const imageFilePath = path.join(imagesFolderPath, `${image.id}.png`)
+    return fs.readFileSync(imageFilePath)
+}

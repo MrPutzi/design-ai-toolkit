@@ -1,23 +1,20 @@
 import React, { useEffect, useState } from 'react';
-import {getImage, getImagesIds} from '../utils/storageHandler';
-import path from "path";
-import fs from "fs";
+import { getImage, getImagesIds } from '../utils/storageHandler';
+import {NextPage} from "next";
 
-const ImageGallery = () => {
-    const [images, setImages] = useState([]);
+const Home: NextPage = () => {
+    const [images, setImages] = useState<string[]>([]);
 
     useEffect(() => {
+        const imageIds = getImagesIds();
 
-        getImagesIds().map(id => {
+        const fetchedImages = imageIds.map(id => {
             const image = getImage({ id, url: '' });
             return URL.createObjectURL(new Blob([image]));
-        }
-        )
-        setImages(images);
-    }
-    , []);
+        });
 
-
+        setImages(fetchedImages);
+    }, []);
 
     return (
         <div>
@@ -28,4 +25,4 @@ const ImageGallery = () => {
     );
 };
 
-export default ImageGallery;
+export default Home;
