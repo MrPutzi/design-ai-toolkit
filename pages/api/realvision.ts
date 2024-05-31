@@ -4,7 +4,7 @@ import {Ratelimit} from "@upstash/ratelimit";
 import Replicate from "replicate";
 import requestIp from "request-ip";
 import dotenv from "dotenv";
-import {saveImage} from "../../utils/storageHandler";
+import {saveImage, uploadImage} from "../../utils/storageHandler";
 dotenv.config()
 
 interface ExtendedNextApiRequest extends NextApiRequest {
@@ -60,7 +60,7 @@ export default async (
     try {
         const response = await replicate.run(model, {input});
         const {output} = response as {output: string};
-        saveImage({id: Date.now(), url: output});
+        saveImage(output, 'realvision')
         res.status(200).json({ success: true, output });
     } catch (error) {
         console.error(error);

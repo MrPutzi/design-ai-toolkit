@@ -2,6 +2,7 @@ import React, {useCallback, useState} from 'react';
 import LoadingDots from "./LoadingDots";
 import  generatePhoto  from "../pages/api/generate";
 import dotenv from "dotenv";
+import { uploadImage, getImage } from "../utils/storageHandler";
 
 interface FormData {
     width: number;
@@ -94,6 +95,7 @@ const InputForm: React.FC = () => {
         setLoading(false);
         if (response.ok) {
             setGeneratedPhoto(data.photoUrl);
+            uploadImage(data.photoUrl);
         } else {
             setError(data.message);
         }

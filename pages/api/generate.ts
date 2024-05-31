@@ -5,7 +5,7 @@ import {NextApiRequest, NextApiResponse} from "next";
 import {Ratelimit} from "@upstash/ratelimit";
 import redis from "../../utils/redis";
 import {dot} from "@tensorflow/tfjs";
-import {saveImage} from "../../utils/storageHandler";
+import {saveImage, uploadImage} from "../../utils/storageHandler";
 dotenv.config()
 
 interface ExtendedNextApiRequest extends NextApiRequest {
@@ -78,9 +78,9 @@ export default async function handler (
     };
 
     const generatedPhotoData = handleOutput(output);
-    saveImage({id: Date.now(), url: generatedPhotoData.photoUrl!});
     // download the image and save it to the storage
 
     res.status(200).json(generatedPhotoData);
-
-}
+    if (generatedPhotoData.photoUrl) {
+        saveImage(generatedPhotoData.photoUrl, 'stable-diffusion');
+    }}

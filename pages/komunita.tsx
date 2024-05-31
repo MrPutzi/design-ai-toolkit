@@ -1,25 +1,31 @@
 import React, { useEffect, useState } from 'react';
-import { getImage, getImagesIds } from '../utils/storageHandler';
-import {NextPage} from "next";
+import { getStorage, ref, listAll, getDownloadURL } from 'firebase/storage';
+import { initializeApp } from 'firebase/app';
+import { firebaseConfig } from "../utils/firebaseConfig";
 
-const Home: NextPage = () => {
-    const [images, setImages] = useState<string[]>([]);
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const storage = getStorage(app);
+
+const Home = () => {
+    const [imageUrls, setImageUrls] = useState<string[]>([]);
 
     useEffect(() => {
-        const imageIds = getImagesIds();
+        const fetchImages = async () => {
+            const imagesRef = ref(storage, 'myFolder'); // replace 'myFolder' with your folder name
+            const { items } = await listAll(imagesRef);
+            const urlPromises = items.map((item) => getDownloadURL(item));
+            const urls = await Promise.all(urlPromises);
+            setImageUrls(urls);
+        };
 
-        const fetchedImages = imageIds.map(id => {
-            const image = getImage({ id, url: '' });
-            return URL.createObjectURL(new Blob([image]));
-        });
-
-        setImages(fetchedImages);
+        fetchImages();
     }, []);
 
     return (
         <div>
-            {images.map((image, index) => (
-                <img key={index} src={image} alt={`Generated Image ${index + 1}`} />
+            {imageUrls.map((url, index) => (
+                <img key={index} src={url} alt="From Firebase" />
             ))}
         </div>
     );

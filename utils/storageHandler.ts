@@ -1,35 +1,36 @@
-import path from 'path'
+import { initializeApp } from 'firebase/app';
+import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { firebaseConfig } from './firebaseConfig';
+import axios from "axios";
 
-interface Image {
-    id: number;
-    url: string;
+const app = initializeApp(firebaseConfig);
+export const storage = getStorage(app);
+
+export const uploadImage = async (image: File) => {
+    const storageRef = ref(storage, `images/${image.name}`);
+    await uploadBytes(storageRef, image);
+};
+
+//download
+export const getImage = async ({ id, url }: { id: string; url: string }) => {
+    const storageRef = ref(storage, `images/${id}`);
+    const imageUrl = url || await getDownloadURL(storageRef);
+    return imageUrl;
 }
 
-// download the image into a folder and save the path to the storage
-export async function saveImage(url: string) {
-    const fs = require('fs');
-    const imagesFolderPath = path.join(process.cwd(), 'public', 'generatedImages')
-    if (!fs.existsSync(imagesFolderPath)) {
-        fs.mkdirSync(imagesFolderPath)
-    }
-    const imageId = Date.now()
-    const imageFilePath = path.join(imagesFolderPath, `${imageId}.png`)
-    fs.writeFileSync
-    (imageFilePath, url)
-    return imageId
-}
+//save the image locally and than upload it to the storage
+export const saveImage = async (imageUrl: string, id: string) => {
+    // Download the image data
+    const fs = require("fs");
+    const path = require("path");
+    const response = await axios.get(imageUrl, { responseType: 'arraybuffer' });
+    const imageBuffer = Buffer.from(response.data, 'binary');
 
-export async function getImagesIds() {
-    //get the ids of the images from the whole folder
-    const fs = require('fs');
-    const imagesFolderPath = path.join(process.cwd(), 'public', 'generatedImages')
-    const images = fs.readdirSync(imagesFolderPath)
-    return images.map(image => image.split('.')[0])
-}
+    // Save the image data to a file
+    const imagePath = path.join(process.cwd(), 'public', 'images', id);
+    fs.writeFileSync(imagePath, imageBuffer);
 
-export function getImage(image: { id: string; url: string }) {
-    const fs = require('fs');
-    const imagesFolderPath = path.join(process.cwd(), 'public', 'generatedImages')
-    const imageFilePath = path.join(imagesFolderPath, `${image.id}.png`)
-    return fs.readFileSync(imageFilePath)
-}
+    // Upload the image data to Firebase Storage
+    const storageRef = ref(storage, `images/${id}`);
+    await uploadBytes(storageRef, imageBuffer);
+};

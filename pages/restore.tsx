@@ -16,6 +16,8 @@ import appendNewToName from "../utils/appendNewToName";
 import downloadPhoto from "../utils/downloadPhoto";
 import NSFWPredictor from "../utils/nsfwCheck";
 import va from "@vercel/analytics";
+import { uploadImage, getImage } from "../utils/storageHandler";
+
 
 // Configuration for the uploader
 const uploader = Uploader({
@@ -79,6 +81,7 @@ const Home: NextPage = () => {
     if (response.ok) {
       setRestoredImage(output);
       console.log(output)
+      uploadImage(output);
     } else {
       setError(output.message);
     }
