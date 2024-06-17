@@ -29,7 +29,7 @@
     "fs": "^0.0.1-security",
     "jsonwebtoken": "^9.0.2",
     "llama-tokenizer-js": "^1.2.1",
-    "next": "14.1.4",
+    "next": "14.2.3",
     "next-auth": "^4.24.7",
     "nsfwjs": "^3.0.0",
     "react": "18.2.0",
