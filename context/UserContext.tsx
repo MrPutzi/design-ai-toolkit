@@ -11,6 +11,11 @@ export type UserContextType = {
     setUser: React.Dispatch<React.SetStateAction<UserState>>;
 };
 
-export const UserContext = React.createContext<UserContextType | undefined>(undefined);
+const defaultUserState: UserState = null;
 
+const defaultContextValue: UserContextType = {
+    user: defaultUserState,
+    setUser: () => {}, // No-op function for default value
+};
 
+export const UserContext = React.createContext<UserContextType>(defaultContextValue);

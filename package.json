@@ -44,7 +44,8 @@
     "request-ip": "^3.3.0",
     "styled-components": "^6.1.8",
     "update": "^0.7.4",
-    "uploader": "^3.3.0"
+    "uploader": "^3.3.0",
+    "uuid": "^10.0.0"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.6",
@@ -53,6 +54,7 @@
     "@types/react": "18.0.21",
     "@types/react-dom": "18.0.6",
     "@types/request-ip": "^0.0.37",
+    "@types/uuid": "^9.0.8",
     "ai": "^3.1.1",
     "autoprefixer": "^10.4.19",
     "postcss": "^8.4.38",

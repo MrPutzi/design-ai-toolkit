@@ -16,8 +16,6 @@ import appendNewToName from "../utils/appendNewToName";
 import downloadPhoto from "../utils/downloadPhoto";
 import NSFWPredictor from "../utils/nsfwCheck";
 import va from "@vercel/analytics";
-import { uploadImage, getImage } from "../utils/storageHandler";
-
 
 // Configuration for the uploader
 const uploader = Uploader({
@@ -81,7 +79,6 @@ const Home: NextPage = () => {
     if (response.ok) {
       setRestoredImage(output);
       console.log(output)
-      uploadImage(output);
     } else {
       setError(output.message);
     }
@@ -97,7 +94,7 @@ const Home: NextPage = () => {
         <Header />
         <main className="flex flex-1 w-full flex-col items-center justify-center text-center px-4 mt-4 sm:mb-0 mb-8">
           <h1 className="mx-auto max-w-4xl font-display text-4xl font-bold tracking-normal text-slate-900 sm:text-6xl mb-5">
-            Upravte svoje fotografie pomocou umeléj inteligencie.
+            Upravte svoje fotografie pomocou umelej inteligencie.
           </h1>
           <p className="text-slate-500">
             Nahrajte svoje fotografie a nechajte AI obnoviť ich kvalitu. AI je trénované na obnovu starých fotografií, odstránenie šumu a zlepšenie črtov tváre.
@@ -174,31 +171,6 @@ const Home: NextPage = () => {
                           className="bg-black rounded-full text-white font-medium px-4 py-2 mt-8 hover:bg-black/80 transition"
                       >
                         Upload New Photo
-                      </button>
-                  )}
-
-                  {isUploaded ? (
-                      <div>
-                        <button
-                            onClick={deleteImage}
-                            className="bg-black rounded-full text-white font-medium px-4 py-2 mt-8 hover:bg-black/80 transition"
-                        >
-                          Delete Uploaded Photo
-                        </button>
-                        {restoredImage && <a href={restoredImage} download className="button">Download Restored Photo</a>}
-                      </div>
-                  ) : null}
-                  {restoredLoaded && (
-                      <button
-                          onClick={() => {
-                            downloadPhoto(
-                                restoredImage!,
-                                appendNewToName(photoName!)
-                            );
-                          }}
-                          className="bg-black rounded-full text-white font-medium px-4 py-2 mt-8 hover:bg-black/80 transition"
-                      >
-                        Download Restored Photo
                       </button>
                   )}
                 </div>

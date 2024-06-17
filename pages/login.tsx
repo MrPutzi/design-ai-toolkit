@@ -1,15 +1,18 @@
 // File: /pages/index.tsx
-import { NextPage } from "next";
-import Head from "next/head";
-import Link from "next/link";
-import { useState } from "react";
-import Header from "../components/Header";
-import NadpisAI from "../components/NadpisAI";
-import Footer from "../components/Footer";
+
+import { NextPage } from 'next';
+import Head from 'next/head';
+import Link from 'next/link';
+import { useState } from 'react';
+import { useRouter } from 'next/router';
+import Header from '../components/Header';
+import NadpisAI from '../components/NadpisAI';
+import Footer from '../components/Footer';
 
 const Home: NextPage = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const router = useRouter();
 
     const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
@@ -26,7 +29,7 @@ const Home: NextPage = () => {
 
         if (data.token) {
             localStorage.setItem('token', data.token);
-            // Redirect the user to the home page or dashboard
+            router.push('/');
         } else {
             alert('Invalid credentials');
         }

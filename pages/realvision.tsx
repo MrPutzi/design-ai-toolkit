@@ -6,7 +6,6 @@ import ResizablePanel from "../components/ResizablePanel";
 import {AnimatePresence, motion} from "framer-motion";
 import Image from "next/image";
 import Footer from "../components/Footer";
-import { uploadImage, getImage } from "../utils/storageHandler";
 
 const Home = () => {
 
@@ -35,7 +34,6 @@ const Home = () => {
         setLoading(false);
         if (response.ok) {
             setGeneratedPhoto(data.output);
-            uploadImage(data.output);
         } else {
             setError(data.message);
         }

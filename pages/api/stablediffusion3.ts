@@ -1,16 +1,16 @@
 import Replicate from 'replicate'
 import dotenv from 'dotenv'
-import requestIp from "request-ip";
 import {NextApiRequest, NextApiResponse} from "next";
-import {Ratelimit} from "@upstash/ratelimit";
 import redis from "../../utils/redis";
-import {dot} from "@tensorflow/tfjs";
+import {Ratelimit} from "@upstash/ratelimit";
+import requestIp from "request-ip";
+
 dotenv.config()
 
-interface ExtendedNextApiRequest extends NextApiRequest {
-    body: {
-        prompt: string;
-    };
+interface Data {
+    success: boolean;
+    photoUrl?: string; // Optional in case of errors
+    message?: string;
 }
 
 const ratelimit = redis
@@ -21,10 +21,13 @@ const ratelimit = redis
     })
     : undefined;
 
-interface Data {
-    success: boolean;
-    photoUrl?: string; // Optional in case of errors
-    message?: string;
+interface ExtendedNextApiRequest extends NextApiRequest {
+    body: {
+        prompt: string;
+        aspectRatio: string;
+        outputQuality: number;
+        negativePrompt: string;
+    };
 }
 
 export default async function handler (
@@ -43,27 +46,16 @@ export default async function handler (
         }
     }
 
-
-
     const replicate = new Replicate({
         auth: process.env.REPLICATE_API_KEY,
         userAgent: 'https://www.npmjs.com/package/create-replicate'
     })
-    const model = 'stability-ai/sdxl:39ed52f2a78e934b3ba6e2a89f5b1c712de7dfea535525255b1aa35c5565e08b'
+    const model = 'stability-ai/stable-diffusion-3'
     const input = {
-        width: 768,
-        height: 768,
         prompt: req.body.prompt,
-        refine: 'expert_ensemble_refiner',
-        scheduler: 'K_EULER',
-        lora_scale: 0.6,
-        num_outputs: 1,
-        guidance_scale: 7.5,
-        apply_watermark: false,
-        high_noise_frac: 0.8,
-        negative_prompt: '',
-        prompt_strength: 0.8,
-        num_inference_steps: 25,
+        aspect_ratio: req.body.aspectRatio,
+        output_quality: req.body.outputQuality,
+        negative_prompt: req.body.negativePrompt,
     }
 
     console.log({model, input})
@@ -78,5 +70,4 @@ export default async function handler (
 
     const generatedPhotoData = handleOutput(output);
     res.status(200).json(generatedPhotoData);
-
 }

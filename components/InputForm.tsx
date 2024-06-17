@@ -2,7 +2,6 @@ import React, {useCallback, useState} from 'react';
 import LoadingDots from "./LoadingDots";
 import  generatePhoto  from "../pages/api/generate";
 import dotenv from "dotenv";
-import { uploadImage, getImage } from "../utils/storageHandler";
 
 interface FormData {
     width: number;
@@ -95,36 +94,10 @@ const InputForm: React.FC = () => {
         setLoading(false);
         if (response.ok) {
             setGeneratedPhoto(data.photoUrl);
-            uploadImage(data.photoUrl);
         } else {
             setError(data.message);
         }
     };
-
-    // async function generatePhoto() {
-    //     await new Promise((resolve) => setTimeout(resolve, 10));
-    //     if (!inputPrompt) {
-    //         setError('Please enter a description for your image.');
-    //         return;
-    //     }
-    //     setLoading(true);
-    //     setError(null);
-    //     setGeneratedPhoto(undefined);
-    //     const response = await fetch('/api/generate', {
-    //         method: 'POST',
-    //         headers: {
-    //             'Content-Type': 'application/json',
-    //         },
-    //         body: JSON.stringify({ prompt: inputPrompt }),
-    //     });
-    //     let data = await response.json();
-    //     setLoading(false);
-    //     if (response.ok) {
-    //         setGeneratedPhoto(data.photoUrl);
-    //     } else {
-    //         setError(data.message);
-    //     }
-    // }
 
     return (
         // <div className="flex flex-col items-center justify-center">
@@ -186,21 +159,6 @@ const InputForm: React.FC = () => {
                     <span className="inline-block ml-2">{formData.height}</span>
                 </div>
 
-                {/*<div className="form-group">*/}
-                {/*    <label htmlFor="numOutputs">Number of Outputs:</label>*/}
-                {/*    <input*/}
-                {/*        type="range"*/}
-                {/*        id="numOutputs"*/}
-                {/*        name="num_outputs" // Zmenené z "numOutputs" na "num_outputs"*/}
-                {/*        min="1"*/}
-                {/*        max="4"*/}
-                {/*        value={formData.num_outputs}*/}
-                {/*        onChange={handleChange}*/}
-                {/*        className="w-full mb-2"*/}
-                {/*    />*/}
-                {/*    <span className="inline-block ml-2">{formData.num_outputs}</span>*/}
-                {/*</div>*/}
-
                 <div className="form-group">
                     <label htmlFor="scheduler">Scheduler:</label>
                     <select
@@ -253,8 +211,9 @@ const InputForm: React.FC = () => {
 
         </div>
         <div className="w-1/2  border-gray-300 border-2 rounded-xl ">
-        </div>
+
         {generatedPhoto && <img src={generatedPhoto} alt="Generated" className="w-full"/>}
+        </div>
     </div>
 )
     ;

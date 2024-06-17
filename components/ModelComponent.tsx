@@ -1,8 +1,9 @@
 import React, {useEffect} from 'react';
 import styled from 'styled-components';
+import starImage from '../public/corner.png';
 
 // Štýlované komponenty
-const Card = styled.div`
+const Card = styled.div<{ isSD3Model?: boolean }>`
     margin-right: 25px;
     background-color: #fff;
     width: 33.3%;
@@ -12,11 +13,11 @@ const Card = styled.div`
     box-shadow: 4px 13px 10px -7px rgba(0, 0, 0, 0.1);
     transition: all 0.3s ease;
     stroke-opacity: 0.5;
+    border: ${props => props.isSD3Model ? '2px solid red ' : 'none'};
 
     &:hover {
         box-shadow: 20px 30px 18px -8px rgba(0, 0, 0, 0.1);
         transform: scale(1.10, 1.10);
-        
     }
 `;
 
@@ -64,11 +65,17 @@ type ModelProps = {
 
 const ModelCard: React.FC<ModelProps> = ({ title, description, imageUrl, link }) => {
     return (
-
-        <Card onClick={()=>window.location.href = link} className="bg-blue-500 shadow-lg shadow-blue-500/50">
-            <CardImg imageUrl={imageUrl} />
+        <Card
+            onClick={()=>window.location.href = link}
+            className="bg-blue-500 shadow-lg relative"
+            isSD3Model={title === 'stability-ai/stable-diffusion-3'}
+        >
+            {title === 'stability-ai/stable-diffusion-3' &&
+                <img src={starImage.src} alt="Star" className="absolute  h-14 w-14"/>
+            }
+                <CardImg imageUrl={imageUrl}/>
             <CardTitle>
-                <h5 className="card-title bold-title">{title}</h5>
+            <h5 className="card-title bold-title">{title}</h5>
             </CardTitle>
             <CardInfo>
                 <p className="card-text">{description}</p>
@@ -76,14 +83,13 @@ const ModelCard: React.FC<ModelProps> = ({ title, description, imageUrl, link })
         </Card>
     );
 };
-
 type ModelListProps = {
     models: ModelProps[];
 };
 
 const ModelList: React.FC<ModelListProps> = ({ models }) => {
     return (
-        <div className="flex flex-row justify-content-between">
+        <div className="flex flex-wrap justify-center">
             {models.map((model) => (
                 <ModelCard
                     key={model.title}
@@ -109,7 +115,9 @@ const ModelComponent: React.FC = () => {
             { title: 'stable diffusion', description: 'generácia fotiek z textu', imageUrl: "https://i.imgur.com/GEQ0PGSl.png",link:"/generate", category:"Generate" },
             { title: 'nightmareai/real-esrgan', description: 'zväčšenie rozlíšenia', imageUrl: "https://i.imgur.com/1H73uDC.png",link:"/realesrgan", category:"Restore" },
             { title: 'lucataco/realistic-vision-v5', description: 'generácia realistických fotiek z textu', imageUrl: "https://replicate.delivery/pbxt/eVMzXJerAzpqnErNJ9P4ncWmd2d3OkGA31DKhG3ElQhLMIbRA/output.png",link:"/realvision", category:"Generate" },
-            { title: "lama/chat-gpt", description: "page", imageUrl: "https://i.imgur.com/1H73uDC.png", link: "/page", category: "Generate" },
+            // { title: "lama/chat-gpt", description: "page", imageUrl: "https://i.imgur.com/1H73uDC.png", link: "/page", category: "Generate" },
+            { title: "stability-ai/stable-diffusion-3", description: "najnovší model generácie fotiek", imageUrl: "https://i.imgur.com/8kYG1La.png", link: "/stablediffusion", category: "Generate" },
+
         ];
         setModels(mockModels);
     }, []);
@@ -120,10 +128,11 @@ const ModelComponent: React.FC = () => {
 
     return (
         <div>
+            <h2 className="text-3xl antialiased font-bold pb-12 ">Generate Models</h2>
+            <ModelList models={generateModels}/>
             <h2 className="text-3xl antialiased font-bold pb-12">Restore Models</h2>
-            <ModelList models={restoreModels} />
-            <h2 className="text-3xl antialiased font-bold pb-12">Generate Models</h2>
-            <ModelList models={generateModels} />
+            <ModelList models={restoreModels}/>
+
         </div>
     );
 };
