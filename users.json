@@ -1,1 +1,13 @@
-[{"id":"1713343312120","email":"rolfekete@gmail.com","password":"$2a$12$vRu6w9Qbd1Ka7Zrbcf06TuHG1WegU1dbbC9.pXa6gT5ya2t/Vh.Mq"}]
+[
+  {
+    "id": "1713343312120",
+    "email": "rolfekete@gmail.com",
+    "password": "$2a$12$vRu6w9Qbd1Ka7Zrbcf06TuHG1WegU1dbbC9.pXa6gT5ya2t/Vh.Mq"
+  },
+  {
+    "id": "1718524113990",
+    "email": "rolfekete2@gmail.com",
+    "password": "$2a$12$gM8uM/AKTYi/dtL0raM8zO8LSmK5tCeOPGzShe/MBRq2kZ0A1cE4u",
+    "credit": 50
+  }
+]

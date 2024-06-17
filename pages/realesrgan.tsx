@@ -65,68 +65,6 @@ const Home: NextPage = () => {
     }
 
 
-    // async function generatePhoto(fileUrl: string) {
-    //     setLoading(true);
-    //     setError(null);
-    //     setUpscaledPhoto(null);
-    //     const response = await fetch('/api/realesrgan', {
-    //         method: 'POST',
-    //         headers: {
-    //             'Content-Type': 'application/json',
-    //         },
-    //         body: JSON.stringify({ imageUrl: fileUrl }),
-    //     });
-    //     let data = await response.json();
-    //     setLoading(false);
-    //     if (response.ok) {
-    //         setLoading(false);
-    //         setUpscaledPhoto(data.photoUrl);
-    //     } else {
-    //         setError(data.message);
-    //     }
-    // }
-
-
-    // async function generatePhoto(fileUrl: string) {
-    //     setLoading(true);
-    //     setError(null);
-    //     setUpscaledPhoto(null);
-    //     const response = await fetch('/api/realesrgan', {
-    //         method: 'POST',
-    //         headers: {
-    //             'Content-Type': 'application/json',
-    //         },
-    //         body: JSON.stringify({ input: { image: fileUrl, scale: 2, face_enhance: false }}),
-    //     });
-    //     console.log(response)
-    //     if (!response.ok) {
-    //         setLoading(false);
-    //         setError('Error: ' + response.statusText);
-    //         return;
-    //     }
-    //
-    //     let data = await response.json();
-    //     setLoading(false);
-    //     if (data.success) {
-    //         setUpscaledPhoto(data.output);
-    //     } else {
-    //         setError(data.message);
-    //     }
-    // }
-// async function generatePhoto(fileUrl: string) {
-//     fetch('/api/realesrgan', {
-//         method: 'POST',
-//         headers: {'Content-Type': 'application/json'},
-//         body: JSON.stringify({
-//             image: fileUrl,
-//             scale: 2,
-//             faceEnhance: false,
-//         }),
-//     })
-//         .then(response => response.json())
-//         .then(output => console.log(output))
-//         .catch(error => console.error(error));
-// }
     async function generatePhoto(fileUrl: string) {
         setLoading(true);
         setError(null);

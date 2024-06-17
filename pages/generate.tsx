@@ -19,42 +19,6 @@ import InputForm from "../components/InputForm";
 const Home = () => {
 
 
-
-    // interface FormData {
-    //     width: number;
-    //     height: number;
-    //     prompt: string;
-    //     scheduler: string;
-    //     numInterferenceSteps: number;
-    //     refine: string;
-    //     lora_scale: number;
-    //     guidance_scale: number;
-    //     apply_watermark: boolean;
-    //     high_noise_frac: number;
-    //     negative_prompt: string;
-    //     prompt_strength: number;
-    //     num_inference_steps: number;
-    //     num_outputs: number;
-    // }
-
-    // const InputForm: React.FC = () => {
-    //     const [formData, setFormData] = useState<FormData>({
-    //         numInterferenceSteps: 0,
-    //         width: 768,
-    //         height: 768,
-    //         prompt: '',
-    //         refine: 'expert_ensemble_refiner',
-    //         scheduler: 'K_EULER',
-    //         lora_scale: 0.6,
-    //         num_outputs: 1,
-    //         guidance_scale: 7.5,
-    //         apply_watermark: false,
-    //         high_noise_frac: 0.8,
-    //         negative_prompt: '',
-    //         prompt_strength: 0.8,
-    //         num_inference_steps: 25
-    //     });
-
         const [generatedPhoto, setGeneratedPhoto] = useState<string | undefined>(undefined); // State for generated photo URL
         const [loading, setLoading] = useState<boolean>(false);
         const [restoredLoaded, setRestoredLoaded] = useState<boolean>(false);
@@ -68,39 +32,7 @@ const Home = () => {
         const [numInterferenceSteps, setNumInterferenceSteps] = useState<number>(25);
 
 
-        // const handleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-        //     setFormData({
-        //         ...formData,
-        //         [event.target.name]: event.target.type === 'number' ?
-        //             parseInt(event.target.value, 10) : event.target.value,
-        //     });
-        // };
 
-
-        // async function generatePhoto() {
-        //     await new Promise((resolve) => setTimeout(resolve, 10));
-        //     if (!inputPrompt) {
-        //         setError('Please enter a description for your image.');
-        //         return;
-        //     }
-        //     setLoading(true);
-        //     setError(null);
-        //     setGeneratedPhoto(undefined);
-        //     const response = await fetch('/api/generate', {
-        //         method: 'POST',
-        //         headers: {
-        //             'Content-Type': 'application/json',
-        //         },
-        //         body: JSON.stringify({prompt: inputPrompt}),
-        //     });
-        //     let data = await response.json();
-        //     setLoading(false);
-        //     if (response.ok) {
-        //         setGeneratedPhoto(data.photoUrl);
-        //     } else {
-        //         setError(data.message);
-        //     }
-        // }
 
         function onImageLoadError() {
             setError('Failed to load image.');
