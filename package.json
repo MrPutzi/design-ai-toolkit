@@ -24,7 +24,7 @@
     "axios": "^1.7.2",
     "bcryptjs": "^2.4.3",
     "dotenv": "^16.4.5",
-    "firebase": "^10.12.2",
+    "firebase": "^11.0.0",
     "framer-motion": "^8.2.4",
     "fs": "^0.0.1-security",
     "jsonwebtoken": "^9.0.2",
